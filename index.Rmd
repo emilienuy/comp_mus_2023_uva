@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Indie"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
