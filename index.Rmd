@@ -1,34 +1,54 @@
 ---
-title: "Indie"
+title: "Investigating Indie"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
+    storyboard: true
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library(tidyverse)
+library(ggplot2)
+library(spotifyr)
 ```
 
-Column {data-width=650}
------------------------------------------------------------------------
-
-### Chart A
-
+### What makes a song "Indie"? 
+  There is an ongoing debate on whether indie music can be considered a genre. Indie is short for “independent” and refers to music released by an artist independently rather than with a record label. Some bands that are considered to be indie, such as Arcade Fire, however, work with a record label. This begs the question: What makes indie music indie? Some argue that indie music has a specific sound, but what are its defining characteristics that allows Spotify to create “Indie” playlists? I hope to investigate this question with my corpus containing songs from three different indie sub-genre playlists created by Spotify: “Indie Rock Mix,” “Indie Pop Mix,” and “Indie Folk Mix.” Comparing songs from these different sub-genres will clarify what characteristics of a song Spotify considers to be indie. The main limitation of my investigation is that the songs in the playlists are recommended by Spotify for my specific account. Hence, it may not reflect the most popular indie songs nor be representative of indie music as a whole. “The Less I Know the Better” by Tame Impala is a typical indie song in my corpus, because it cannot be tied to another genre. Two atypical songs are “Sunflower” by Harry Styles and “Work Song” by Hozier, because neither of these artists are considered to be indie artists. These songs will be good to analyze since they may have the characteristics of a typical indie song, but they are made by non-indie artists.
+  
+  
 ```{r}
 
 ```
 
-Column {data-width=350}
------------------------------------------------------------------------
 
-### Chart B
+### Indie Rock Has The Energy, Indie Folk Is For The Feels
 
-```{r}
+<!-- ```{r} -->
+<!-- folk <- get_playlist_audio_features("", "37i9dQZF1EIfjV34mXjFem") -->
+<!-- pop <- get_playlist_audio_features("", "37i9dQZF1DWWEcRhUVtL8n") -->
+<!-- rock <- get_playlist_audio_features("","37i9dQZF1EIcqNFLKnDOcZ") -->
 
-```
+<!-- indie <- -->
+<!--   bind_rows( -->
+<!--     folk |> mutate(category = "Indie Folk"), -->
+<!--     pop |> mutate(category = "Indie Pop"), -->
+<!--     rock |> mutate(category= "Indie Rock") -->
+<!--   ) -->
 
-### Chart C
+<!-- energy_valence <- ggplot(indie, aes(x = energy, y = loudness, color=valence)) +  -->
+<!--                    geom_point() + facet_wrap(~category) -->
+
+<!-- energy_valence + labs(x = "Energy", y = "Loudness") -->
+
+<!-- ``` -->
+
+***
+
+Energy and loudness are widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the "Indie" label. What is clear, however, is that Spotify's "Indie Rock" playlist holds the songs with the most energy and loudness, followed by "Indie Pop" and "Indie Folk." Hence, the energy and loudness features can help us distinguish Indie songs from each other and categorize them into sub-genres. 
+Indie Folk separates itself from the other two sub-genres through the valence feature. Compared to Rock and Pop, most of the Indie Folk songs have a negative valence. In other words, Indie Folk is a sad sub-genre.
+
+
+### Conclusion
 
 ```{r}
 
