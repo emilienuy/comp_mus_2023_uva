@@ -23,24 +23,24 @@ library(spotifyr)
 
 ### Indie Rock Has The Energy, Indie Folk Is For The Feels
 
-<!-- ```{r} -->
-<!-- folk <- get_playlist_audio_features("", "37i9dQZF1EIfjV34mXjFem") -->
-<!-- pop <- get_playlist_audio_features("", "37i9dQZF1DWWEcRhUVtL8n") -->
-<!-- rock <- get_playlist_audio_features("","37i9dQZF1EIcqNFLKnDOcZ") -->
+```{r}
+folk <- get_playlist_audio_features("", "37i9dQZF1EIfjV34mXjFem")
+pop <- get_playlist_audio_features("", "37i9dQZF1DWWEcRhUVtL8n")
+rock <- get_playlist_audio_features("","37i9dQZF1EIcqNFLKnDOcZ")
 
-<!-- indie <- -->
-<!--   bind_rows( -->
-<!--     folk |> mutate(category = "Indie Folk"), -->
-<!--     pop |> mutate(category = "Indie Pop"), -->
-<!--     rock |> mutate(category= "Indie Rock") -->
-<!--   ) -->
+indie <-
+  bind_rows(
+    folk |> mutate(category = "Indie Folk"),
+    pop |> mutate(category = "Indie Pop"),
+    rock |> mutate(category= "Indie Rock")
+  )
 
-<!-- energy_valence <- ggplot(indie, aes(x = energy, y = loudness, color=valence)) +  -->
-<!--                    geom_point() + facet_wrap(~category) -->
+energy_valence <- ggplot(indie, aes(x = energy, y = loudness, color=valence)) +
+                   geom_point() + facet_wrap(~category)
 
-<!-- energy_valence + labs(x = "Energy", y = "Loudness") -->
+energy_valence + labs(x = "Energy", y = "Loudness")
 
-<!-- ``` -->
+```
 
 ***
 
