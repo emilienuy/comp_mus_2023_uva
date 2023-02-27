@@ -52,61 +52,61 @@ Indie Folk separates itself from the other two sub-genres through the valence fe
 The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres.
 
 
-### Energetic Indie Is More Colorful Than Quiet Indie
+<!-- ### Energetic Indie Is More Colorful Than Quiet Indie -->
 
-#### "j's lullaby" by Delaney Bailey Chromagram
+<!-- #### "j's lullaby" by Delaney Bailey Chromagram -->
 
-```{r}
-j_lullaby <-
-  get_tidy_audio_analysis("7LNm1oWd6PniO9wRYpNY5o") |>
-  select(segments) |>
-  unnest(segments) |>
-  select(start, duration, pitches)
+<!-- ```{r} -->
+<!-- j_lullaby <- -->
+<!--   get_tidy_audio_analysis("7LNm1oWd6PniO9wRYpNY5o") |> -->
+<!--   select(segments) |> -->
+<!--   unnest(segments) |> -->
+<!--   select(start, duration, pitches) -->
 
-j_lullaby |>
-  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
-  compmus_gather_chroma() |> 
-  ggplot(
-    aes(
-      x = start + duration / 2,
-      width = duration,
-      y = pitch_class,
-      fill = value
-    )
-  ) +
-  geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
-  theme_minimal() +
-  scale_fill_viridis_c()
-```
+<!-- j_lullaby |> -->
+<!--   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |> -->
+<!--   compmus_gather_chroma() |>  -->
+<!--   ggplot( -->
+<!--     aes( -->
+<!--       x = start + duration / 2, -->
+<!--       width = duration, -->
+<!--       y = pitch_class, -->
+<!--       fill = value -->
+<!--     ) -->
+<!--   ) + -->
+<!--   geom_tile() + -->
+<!--   labs(x = "Time (s)", y = NULL, fill = "Magnitude") + -->
+<!--   theme_minimal() + -->
+<!--   scale_fill_viridis_c() -->
+<!-- ``` -->
 
 
 
-#### "Slow Dance" by Interpol Chromagram
-```{r}
-m <-
-  get_tidy_audio_analysis("1VcIbyyDX8j0GNxSlsRFeJ") |>
-  select(segments) |>
-  unnest(segments) |>
-  select(start, duration, pitches)
+<!-- #### "Slow Dance" by Interpol Chromagram -->
+<!-- ```{r} -->
+<!-- m <- -->
+<!--   get_tidy_audio_analysis("1VcIbyyDX8j0GNxSlsRFeJ") |> -->
+<!--   select(segments) |> -->
+<!--   unnest(segments) |> -->
+<!--   select(start, duration, pitches) -->
 
-m |>
-  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
-  compmus_gather_chroma() |> 
-  ggplot(
-    aes(
-      x = start + duration / 2,
-      width = duration,
-      y = pitch_class,
-      fill = value
-    )
-  ) +
-  geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
-  theme_minimal() +
-  scale_fill_viridis_c()
-```
+<!-- m |> -->
+<!--   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |> -->
+<!--   compmus_gather_chroma() |>  -->
+<!--   ggplot( -->
+<!--     aes( -->
+<!--       x = start + duration / 2, -->
+<!--       width = duration, -->
+<!--       y = pitch_class, -->
+<!--       fill = value -->
+<!--     ) -->
+<!--   ) + -->
+<!--   geom_tile() + -->
+<!--   labs(x = "Time (s)", y = NULL, fill = "Magnitude") + -->
+<!--   theme_minimal() + -->
+<!--   scale_fill_viridis_c() -->
+<!-- ``` -->
 
-***
+<!-- *** -->
 
-"J's Lullaby" is the song with the least energy and loudness, while "Slow Dance," contrary to what its name suggests, is the song with the highest energy and loudness among all the songs in the indie corpus. When comparing these two songs, we can see that "Slow Dance"'s energy is widespread over many chroma, with pitch class B containing the most energy, while "j's lullaby" has most of it's energy focused on pitch classes C# and G#.
+<!-- "J's Lullaby" is the song with the least energy and loudness, while "Slow Dance," contrary to what its name suggests, is the song with the highest energy and loudness among all the songs in the indie corpus. When comparing these two songs, we can see that "Slow Dance"'s energy is widespread over many chroma, with pitch class B containing the most energy, while "j's lullaby" has most of it's energy focused on pitch classes C# and G#. -->
