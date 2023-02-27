@@ -52,33 +52,33 @@ Indie Folk separates itself from the other two sub-genres through the valence fe
 The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres.
 
 
-<!-- ### Energetic Indie Is More Colorful Than Quiet Indie -->
+### Energetic Indie Is More Colorful Than Quiet Indie
 
-<!-- #### "j's lullaby" by Delaney Bailey Chromagram -->
+#### "j's lullaby" by Delaney Bailey Chromagram
 
-<!-- ```{r} -->
-<!-- j_lullaby <- -->
-<!--   get_tidy_audio_analysis("7LNm1oWd6PniO9wRYpNY5o") |> -->
-<!--   select(segments) |> -->
-<!--   unnest(segments) |> -->
-<!--   select(start, duration, pitches) -->
+```{r}
+j_lullaby <-
+  get_tidy_audio_analysis("7LNm1oWd6PniO9wRYpNY5o") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
 
-<!-- j_lullaby |> -->
-<!--   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |> -->
-<!--   compmus_gather_chroma() |>  -->
-<!--   ggplot( -->
-<!--     aes( -->
-<!--       x = start + duration / 2, -->
-<!--       width = duration, -->
-<!--       y = pitch_class, -->
-<!--       fill = value -->
-<!--     ) -->
-<!--   ) + -->
-<!--   geom_tile() + -->
-<!--   labs(x = "Time (s)", y = NULL, fill = "Magnitude") + -->
-<!--   theme_minimal() + -->
-<!--   scale_fill_viridis_c() -->
-<!-- ``` -->
+j_lullaby |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
 
 
 
