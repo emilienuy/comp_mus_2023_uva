@@ -10,6 +10,8 @@ library(flexdashboard)
 library(tidyverse)
 library(ggplot2)
 library(spotifyr)
+library(compmus)
+library(plotly)
 ```
 
 ### What makes a song "Indie"? 
@@ -21,7 +23,7 @@ library(spotifyr)
 ```
 
 
-### Indie Rock Has The Energy, Indie Folk Is For The Feels
+### Indie Rock Has The Energy, Indie Folk Is For The Feels {data-commentary-width=400}
 
 ```{r}
 folk <- get_playlist_audio_features("", "37i9dQZF1EIfjV34mXjFem")
@@ -35,10 +37,11 @@ indie <-
     rock |> mutate(category= "Indie Rock")
   )
 
-energy_valence <- ggplot(indie, aes(x = energy, y = loudness, color=valence)) +
+energy_valence <- ggplot(indie, aes(x = energy, y = loudness, color=valence, label = track.name)) +
                    geom_point() + facet_wrap(~category)
 
 energy_valence + labs(x = "Energy", y = "Loudness")
+ggplotly(energy_valence)
 
 ```
 
@@ -46,11 +49,64 @@ energy_valence + labs(x = "Energy", y = "Loudness")
 
 Energy and loudness are widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the "Indie" label. What is clear, however, is that Spotify's "Indie Rock" playlist holds the songs with the most energy and loudness, followed by "Indie Pop" and "Indie Folk." Hence, the energy and loudness features can help us distinguish Indie songs from each other and categorize them into sub-genres. 
 Indie Folk separates itself from the other two sub-genres through the valence feature. Compared to Rock and Pop, most of the Indie Folk songs have a negative valence. In other words, Indie Folk is a sad sub-genre.
+The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres.
 
 
-### Conclusion
+### Energetic Indie Is More Colorful Than Quiet Indie
+
+#### "j's lullaby" by Delaney Bailey Chromagram
 
 ```{r}
+j_lullaby <-
+  get_tidy_audio_analysis("7LNm1oWd6PniO9wRYpNY5o") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
 
+j_lullaby |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
 ```
 
+
+
+#### "Slow Dance" by Interpol Chromagram
+```{r}
+m <-
+  get_tidy_audio_analysis("1VcIbyyDX8j0GNxSlsRFeJ") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+m |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+***
+
+"J's Lullaby" is the song with the least energy and loudness, while "Slow Dance," contrary to what its name suggests, is the song with the highest energy and loudness among all the songs in the indie corpus. When comparing these two songs, we can see that "Slow Dance"'s energy is widespread over many chroma, with pitch class B containing the most energy, while "j's lullaby" has most of it's energy focused on pitch classes C# and G#.
