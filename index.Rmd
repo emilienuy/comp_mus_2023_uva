@@ -82,31 +82,31 @@ j_lullaby |>
 
 
 
-<!-- #### "Slow Dance" by Interpol Chromagram -->
-<!-- ```{r} -->
-<!-- m <- -->
-<!--   get_tidy_audio_analysis("1VcIbyyDX8j0GNxSlsRFeJ") |> -->
-<!--   select(segments) |> -->
-<!--   unnest(segments) |> -->
-<!--   select(start, duration, pitches) -->
+#### "Slow Dance" by Interpol Chromagram
+```{r}
+m <-
+  get_tidy_audio_analysis("1VcIbyyDX8j0GNxSlsRFeJ") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
 
-<!-- m |> -->
-<!--   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |> -->
-<!--   compmus_gather_chroma() |>  -->
-<!--   ggplot( -->
-<!--     aes( -->
-<!--       x = start + duration / 2, -->
-<!--       width = duration, -->
-<!--       y = pitch_class, -->
-<!--       fill = value -->
-<!--     ) -->
-<!--   ) + -->
-<!--   geom_tile() + -->
-<!--   labs(x = "Time (s)", y = NULL, fill = "Magnitude") + -->
-<!--   theme_minimal() + -->
-<!--   scale_fill_viridis_c() -->
-<!-- ``` -->
+m |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
 
-<!-- *** -->
+***
 
-<!-- "J's Lullaby" is the song with the least energy and loudness, while "Slow Dance," contrary to what its name suggests, is the song with the highest energy and loudness among all the songs in the indie corpus. When comparing these two songs, we can see that "Slow Dance"'s energy is widespread over many chroma, with pitch class B containing the most energy, while "j's lullaby" has most of it's energy focused on pitch classes C# and G#. -->
+"J's Lullaby" is the song with the least energy and loudness, while "Slow Dance," contrary to what its name suggests, is the song with the highest energy and loudness among all the songs in the indie corpus. When comparing these two songs, we can see that "Slow Dance"'s energy is widespread over many chroma, with pitch class B containing the most energy, while "j's lullaby" has most of it's energy focused on pitch classes C# and G#.
