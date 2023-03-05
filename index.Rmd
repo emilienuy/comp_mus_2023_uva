@@ -23,13 +23,12 @@ library(gridExtra)
 
 ```
 
-
 ### Indie Rock Has The Energy, Indie Folk Is For The Feels {data-commentary-width=400}
 
 ```{r}
-folk <- get_playlist_audio_features("", "37i9dQZF1EIfjV34mXjFem")
-pop <- get_playlist_audio_features("", "37i9dQZF1DWWEcRhUVtL8n")
-rock <- get_playlist_audio_features("","37i9dQZF1EIcqNFLKnDOcZ")
+folk <- get_playlist_audio_features("", "0xQcKjXspCi2IDxxKWX2ty")
+pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
+rock <- get_playlist_audio_features("","4Goo1VBBWovMDXuKFdoODK")
 
 indie <-
   bind_rows(
@@ -38,12 +37,8 @@ indie <-
     rock |> mutate(category= "Indie Rock")
   )
 
-energy_valence <- ggplot(indie, aes(x = energy, y = loudness, color=valence, label = track.name)) +
-                   geom_point() + facet_wrap(~category)
-
-energy_valence + scale_color_gradient(low = "yellow", high = "purple") + labs(x = "Energy", y = "Loudness") 
+energy_valence <- ggplot(indie, aes(x = energy, y = loudness, color=valence, label = track.name)) + geom_point() + facet_wrap(~category) + scale_color_gradient(low = "yellow", high = "purple") + labs(x = "Energy", y = "Loudness") + geom_smooth(method=lm)
 ggplotly(energy_valence)
-
 ```
 
 ***
@@ -55,7 +50,6 @@ The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It ha
 
 ### Energetic Indie Has A More Colorful Pitch Than Quiet Indie
 
-#### Chromagram of "j's lullaby" by Delaney Bailey
 ```{r}
 j_lullaby <-
   get_tidy_audio_analysis("7LNm1oWd6PniO9wRYpNY5o") |>
@@ -75,15 +69,13 @@ j_lullaby_plot <- j_lullaby |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"j's lullaby\"\nby Delaney Bailey") +
   theme_minimal() +
   scale_fill_viridis_c()
 
-j_lullaby_plot
 ```
 
 
-#### Chromagram of "Slow Hands" by Interpol
 
 ```{r}
 slow_hands <-
@@ -104,10 +96,11 @@ slow_hands_plot <- slow_hands |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"Slow Hands\"\nby Interpol") +
   theme_minimal() +
   scale_fill_viridis_c()
-slow_hands_plot
+
+grid.arrange(j_lullaby_plot, slow_hands_plot, ncol=2)
 ```
 
 ***
