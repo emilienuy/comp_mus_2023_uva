@@ -23,12 +23,12 @@ library(gridExtra)
 
 ```
 
-### Indie Rock Has The Energy, Indie Folk Is For The Feels {data-commentary-width=400}
 
+### Indie Rock is Energetic
 ```{r}
 folk <- get_playlist_audio_features("", "0xQcKjXspCi2IDxxKWX2ty")
 pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
-rock <- get_playlist_audio_features("","4Goo1VBBWovMDXuKFdoODK")
+rock <- get_playlist_audio_features("","37i9dQZF1EIcqNFLKnDOcZ")
 
 indie <-
   bind_rows(
@@ -37,6 +37,18 @@ indie <-
     rock |> mutate(category= "Indie Rock")
   )
 
+dens_energy <- ggplot(indie, aes(x = energy, color = category)) + geom_histogram() + facet_wrap(~category) + 
+  labs(x = "Energy", y = "Density", 
+       title = "Comparing the Distribution of Energy Between Indie Subgenres",
+       color = "Indie Subgenres") 
+dens_energy
+```
+
+*** 
+This histogram shows that energy is widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the "Indie" label. What is clear, however, is that Spotify's "Indie Rock" playlist holds the songs with the most energy. Hence, Indie Rock separates itself from the other two subgenres through Spotify's energy audio feature.
+
+### Indie Rock Has The Energy, Indie Folk Is For The Feels {data-commentary-width=400}
+```{r}
 energy_valence <- ggplot(indie, aes(x = energy, y = loudness, color=valence, label = track.name)) + geom_point() + facet_wrap(~category) + scale_color_gradient(low = "yellow", high = "purple") + labs(x = "Energy", y = "Loudness") + geom_smooth(method=lm)
 ggplotly(energy_valence)
 ```
@@ -79,7 +91,7 @@ j_lullaby_plot <- j_lullaby |>
 
 ```{r}
 slow_hands <-
-  get_tidy_audio_analysis("1VcIbyyDX8j0GNxSlsRFeJ") |>
+  get_tidy_audio_analysis("3qel23hQWhHT3qGewBQ0pE") |>
   select(segments) |>
   unnest(segments) |>
   select(start, duration, pitches)
