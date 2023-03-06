@@ -26,9 +26,9 @@ library(gridExtra)
 
 ### Indie Rock is Energetic
 ```{r}
-folk <- get_playlist_audio_features("", "0xQcKjXspCi2IDxxKWX2ty")
+folk <- get_playlist_audio_features("", "6P82OCSEpo1VrZ4TZ2W5jK")
 pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
-rock <- get_playlist_audio_features("","37i9dQZF1EIcqNFLKnDOcZ")
+rock <- get_playlist_audio_features("","5dMoFfrgm8aOOkneQjt6LT")
 
 indie <-
   bind_rows(
