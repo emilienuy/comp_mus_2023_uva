@@ -159,7 +159,7 @@ Here we are comparing songs with different extreme levels of energy and valence.
 When comparing these four chromagrams, we can see that the two songs with high energy, "You Only Live Once" and "Wolf Like Me," have their signal's energy more widespread over all the pitch classes. "Wolf Like Me" has much of its energy contained in pitch class B, but the other pitch classes still have some energy (hints of yellow) displayed. "You Only Live Once" has much of its energy contained in pitch classes E and B, but again most of the energy is spread out across all the pitch classes. By contrast, the two songs with low energy have more distinct pitch classes. "j's lullaby" has most of it's energy focused on pitch classes C# and G#, and "Naked As We Come" has most of its energy contained in pitch classes E and B.
 
 
-### A-Punk Typical Indie Rock
+### "A-Punk" by Vampire Weekend, A Typical Indie Rock Song
 
 ``` {r}
 a_punk <-
@@ -197,7 +197,7 @@ a_punk_chroma <- a_punk |>
   coord_fixed() +
   scale_fill_viridis_c(guide = "none") +
   theme_classic() +
-  labs(x = "", y = "")
+  labs(x = "", y = "", title = "Chroma-based Self-Similarity Matrix") + theme(title = element_text(size = 12))
 
 a_punk_timbre <- a_punk |>
   compmus_self_similarity(timbre, "cosine") |> # change timbre/pitches
@@ -214,7 +214,10 @@ a_punk_timbre <- a_punk |>
   coord_fixed() +
   scale_fill_viridis_c(guide = "none") +
   theme_classic() +
-  labs(x = "", y = "")
+  labs(x = "", y = "", title = "Timbre-Based Self-Similarity Matrix") + theme(title = element_text(size = 12))
 
 grid.arrange(a_punk_chroma, a_punk_timbre, ncol=2)
 ```
+
+***
+
