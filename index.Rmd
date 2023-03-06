@@ -47,7 +47,7 @@ dens_energy
 *** 
 This histogram shows that energy is widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the "Indie" label. What is clear, however, is that Spotify's "Indie Rock" playlist holds the songs with the most energy. Hence, Indie Rock separates itself from the other two subgenres through Spotify's energy audio feature.
 
-### Indie Rock Has The Energy, Indie Folk Is For The Feels {data-commentary-width=400}
+### Indie Rock Has The Energy, Indie Folk Is For The Feels, Indie Pop Is Undecided {data-commentary-width=400}
 ```{r}
 energy_valence <- ggplot(indie, aes(x = energy, y = loudness, color=valence, label = track.name)) + geom_point() + facet_wrap(~category) + scale_color_gradient(low = "yellow", high = "purple") + labs(x = "Energy", y = "Loudness") + geom_smooth(method=lm)
 ggplotly(energy_valence)
@@ -81,7 +81,7 @@ j_lullaby_plot <- j_lullaby |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"j's lullaby\"\nby Delaney Bailey", subtitle = "Indie Pop, Lowest Energy,\nNegative Valence") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"j's lullaby\"\nby Delaney Bailey", subtitle = "Indie Pop, Lowest Energy,\nLow Valence") +
   theme_minimal() +
   scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=9), plot.subtitle = element_text(size=7), legend.title = element_text(size=6), legend.key.size = unit(0.4, 'cm'))
 
@@ -103,7 +103,7 @@ live_once_plot <- live_once |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"You Only Live Once\"\nby The Strokes", subtitle = "Indie Rock, Highest Energy,\nPositive Valence") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"You Only Live Once\"\nby The Strokes", subtitle = "Indie Rock, Highest Energy,\nHigh Valence") +
   theme_minimal() +
   scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=9), plot.subtitle = element_text(size=7), legend.title = element_text(size=6), legend.key.size = unit(0.4, 'cm'))
 
@@ -124,13 +124,95 @@ naked_plot <- naked |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"Naked As We Came\"\nby Iron & Wine", subtitle = "Indie Folk, Low Energy,\nPositive Valence") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"Naked As We Came\"\nby Iron & Wine", subtitle = "Indie Folk, Low Energy,\nHigh Valence") +
   theme_minimal() +
   scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=9), plot.subtitle = element_text(size=7), legend.title = element_text(size=6), legend.key.size = unit(0.4, 'cm'))
 
-grid.arrange(j_lullaby_plot, live_once_plot, naked_plot, ncol=2)
+wolf <- get_tidy_audio_analysis("03wKMRNYVvw6s9nm4I4jUS") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+wolf_plot <- wolf |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"Wolf Like Me\"\nby TV On The Radio", subtitle = "Indie Rock, High Energy,\nLow Valence") +
+  theme_minimal() +
+  scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=9), plot.subtitle = element_text(size=7), legend.title = element_text(size=6), legend.key.size = unit(0.4, 'cm'))
+
+grid.arrange(j_lullaby_plot, live_once_plot, naked_plot, wolf_plot, ncol=2)
 ```
 
 ***
 
 "J's Lullaby" is the song with the least energy and loudness, while "Slow Hands," contrary to what its name suggests, is the song with the highest energy and loudness among all the songs in the indie corpus. When comparing these two songs, we can see that "Slow Hands"'s energy is widespread over many chroma, with pitch class B containing the most energy, while "j's lullaby" has most of it's energy focused on pitch classes C# and G#.
+
+
+### A-Punk Typical Indie Rock
+
+``` {r}
+a_punk <-
+  get_tidy_audio_analysis("3AydAydLzyyZutA0375XIz") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+          compmus_summarise, pitches,
+          method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+          compmus_summarise, timbre,
+          method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+a_punk_chroma <- a_punk |>
+  compmus_self_similarity(pitches, "cosine") |> # change timbre/pitches
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+
+a_punk_timbre <- a_punk |>
+  compmus_self_similarity(timbre, "cosine") |> # change timbre/pitches
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+
+grid.arrange(a_punk_chroma, a_punk_timbre, ncol=2)
+```
