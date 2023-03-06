@@ -37,7 +37,7 @@ indie <-
     rock |> mutate(category= "Indie Rock")
   )
 
-dens_energy <- ggplot(indie, aes(x = energy, color = category)) + geom_histogram() + facet_wrap(~category) + 
+dens_energy <- ggplot(indie, aes(x = energy, color = category)) + geom_histogram(fill="white") + facet_wrap(~category) + 
   labs(x = "Energy", y = "Density", 
        title = "Comparing the Distribution of Energy Between Indie Subgenres",
        color = "Indie Subgenres") 
@@ -55,9 +55,9 @@ ggplotly(energy_valence)
 
 ***
 
-Energy and loudness are widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the "Indie" label. What is clear, however, is that Spotify's "Indie Rock" playlist holds the songs with the most energy and loudness, followed by "Indie Pop" and "Indie Folk." Hence, the energy and loudness features can help us distinguish Indie songs from each other and categorize them into sub-genres. 
+Consistent with the last histogram, energy and loudness are widespread over the Indie genre as a whole. What can be observed again is that Spotify's "Indie Rock" playlist holds the songs with the most energy and loudness, followed by "Indie Pop" and "Indie Folk." Hence, the energy and loudness features can help us distinguish Indie songs from each other and categorize them into sub-genres. 
 Indie Folk separates itself from the other two sub-genres through the valence feature. Compared to Rock and Pop, most of the Indie Folk songs have a negative valence. In other words, Indie Folk is a sad sub-genre.
-The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres.
+The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres. Another atypical song is "Naked as We Came" by Iron & Wine since it is one of the few songs that is low in energy and loudness but has a positive valence. These songs will be further investigated.
 
 
 ### Energetic Indie Has A More Colorful Pitch Than Quiet Indie
@@ -81,22 +81,17 @@ j_lullaby_plot <- j_lullaby |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"j's lullaby\"\nby Delaney Bailey") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"j's lullaby\"\nby Delaney Bailey", subtitle = "Indie Pop, Lowest Energy,\nNegative Valence") +
   theme_minimal() +
-  scale_fill_viridis_c()
+  scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=9), plot.subtitle = element_text(size=7), legend.title = element_text(size=6), legend.key.size = unit(0.4, 'cm'))
 
-```
-
-
-
-```{r}
-slow_hands <-
-  get_tidy_audio_analysis("3qel23hQWhHT3qGewBQ0pE") |>
+live_once <-
+  get_tidy_audio_analysis("4fPBB44eDH71YohayI4eKV") |>
   select(segments) |>
   unnest(segments) |>
   select(start, duration, pitches)
 
-slow_hands_plot <- slow_hands |>
+live_once_plot <- live_once |>
   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
   compmus_gather_chroma() |>
   ggplot(
@@ -108,11 +103,32 @@ slow_hands_plot <- slow_hands |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"Slow Hands\"\nby Interpol") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"You Only Live Once\"\nby The Strokes", subtitle = "Indie Rock, Highest Energy,\nPositive Valence") +
   theme_minimal() +
-  scale_fill_viridis_c()
+  scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=9), plot.subtitle = element_text(size=7), legend.title = element_text(size=6), legend.key.size = unit(0.4, 'cm'))
 
-grid.arrange(j_lullaby_plot, slow_hands_plot, ncol=2)
+naked <- get_tidy_audio_analysis("4FuBIkfhZMoRgrDiHL6TYG") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+naked_plot <- naked |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"Naked As We Came\"\nby Iron & Wine", subtitle = "Indie Folk, Low Energy,\nPositive Valence") +
+  theme_minimal() +
+  scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=9), plot.subtitle = element_text(size=7), legend.title = element_text(size=6), legend.key.size = unit(0.4, 'cm'))
+
+grid.arrange(j_lullaby_plot, live_once_plot, naked_plot, ncol=2)
 ```
 
 ***
