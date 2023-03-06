@@ -16,7 +16,7 @@ library(gridExtra)
 ```
 
 
-### Energetic Indie Has A More Colorful Pitch Than Quiet Indie
+### Energetic Indie Has A More Colorful Pitch Than Quiet Indie {data-commentary-width=400}
 
 ```{r}
 j_lullaby <-
