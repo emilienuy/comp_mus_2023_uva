@@ -65,11 +65,12 @@ Indie Folk separates itself from the other two sub-genres through the valence fe
 The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres. Another atypical song is "Naked as We Came" by Iron & Wine since it is one of the few songs that is low in energy and loudness but has a positive valence. These songs will be further investigated.
 
 
-A Closer Look {.storyboard}
+Comparing Pitch {data-navmenu="A Closer Look"}
 ==================================
 
-### Energetic Indie Has A More Colorful Pitch Than Quiet Indie {data-commentary-width=300}
-
+Column {data-width=700}
+-----------------------------------
+### Energetic Indie Has A More Colorful Pitch Than Quiet Indie
 ```{r}
 j_lullaby <-
   get_tidy_audio_analysis("7LNm1oWd6PniO9wRYpNY5o") |>
@@ -89,7 +90,7 @@ j_lullaby_plot <- j_lullaby |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"j's lullaby\"\nby Delaney Bailey", subtitle = "Indie Pop, Lowest Energy, Low Valence") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "\"j's lullaby\" by Delaney Bailey", subtitle = "Indie Pop, Lowest Energy, Low Valence") +
   theme_minimal() +
   scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=8), plot.subtitle = element_text(size=6), axis.title = element_text(size=6), axis.text = element_text(size=6) , legend.title = element_text(size=6), legend.key.size = unit(0.3, 'cm'), legend.text = element_text(size=5))
 
@@ -111,7 +112,7 @@ live_once_plot <- live_once |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"You Only Live Once\"\nby The Strokes", subtitle = "Indie Rock, Highest Energy, High Valence") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "\"You Only Live Once\" by The Strokes", subtitle = "Indie Rock, Highest Energy, High Valence") +
   theme_minimal() +
   scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=8), plot.subtitle = element_text(size=6), axis.title = element_text(size=6), axis.text = element_text(size=6) , legend.title = element_text(size=6), legend.key.size = unit(0.3, 'cm'), legend.text = element_text(size=5))
 
@@ -132,7 +133,7 @@ naked_plot <- naked |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"Naked As We Came\"\nby Iron & Wine", subtitle = "Indie Folk, Low Energy, High Valence") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "\"Naked As We Came\" by Iron & Wine", subtitle = "Indie Folk, Low Energy, High Valence") +
   theme_minimal() +
   scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=8), plot.subtitle = element_text(size=6), axis.title = element_text(size=6), axis.text = element_text(size=6) , legend.title = element_text(size=6), legend.key.size = unit(0.3, 'cm'), legend.text = element_text(size=5))
 
@@ -153,19 +154,26 @@ wolf_plot <- wolf |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "Chromagram of \"Wolf Like Me\"\nby TV On The Radio", subtitle = "Indie Rock, High Energy, Low Valence") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title = "\"Wolf Like Me\" by TV On The Radio", subtitle = "Indie Rock, High Energy, Low Valence") +
   theme_minimal() +
   scale_fill_viridis_c() + theme(plot.title = element_text(face="bold", size=8), plot.subtitle = element_text(size=6), axis.title = element_text(size=6), axis.text = element_text(size=6) , legend.title = element_text(size=6), legend.key.size = unit(0.3, 'cm'), legend.text = element_text(size=5))
 
 grid.arrange(j_lullaby_plot, live_once_plot, naked_plot, wolf_plot, ncol=2)
 ```
 
-***
+Column {data-width=300}
+-----------------------------------
+#### Chromagrams
+A chromagram shows blabla
 
+#### Analysis
 Here we are comparing songs with different extreme levels of energy and valence. As discussed earlier, "j's lullaby" by Delaney Bailey is the song in the corpus with the lowest energy and valence. On the extreme opposite, "You Only Live Once" by The Strokes is one of the songs with the highest energy and highest valence. The other two songs displayed have an atypical combination of opposing energy and valences. The Indie Folk song "Naked As We Came" has low energy and high valence, while "Wolk Like Me" has high energy and low valence.
 
 When comparing these four chromagrams, we can see that the two songs with high energy, "You Only Live Once" and "Wolf Like Me," have their signal's energy more widespread over all the pitch classes. "Wolf Like Me" has much of its energy contained in pitch class B, but the other pitch classes still have some energy (hints of yellow) displayed. "You Only Live Once" has much of its energy contained in pitch classes E and B, but again most of the energy is spread out across all the pitch classes. By contrast, the two songs with low energy have more distinct pitch classes. "j's lullaby" has most of it's energy focused on pitch classes C# and G#, and "Naked As We Come" has most of its energy contained in pitch classes E and B.
 
+
+Self-Similarity Matrices {data-navmenu="A Closer Look"}
+==================================
 
 ### "A-Punk" by Vampire Weekend, A Typical Indie Rock Song
 
