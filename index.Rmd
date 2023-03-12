@@ -52,15 +52,14 @@ DESCRIPTION
 
 ### Indie Rock is Energetic
 ```{r}
-dens_energy <- ggplot(indie, aes(x = energy, color = category)) + geom_histogram(fill="white") + facet_wrap(~category) + 
+dens_energy <- ggplot(indie, aes(x = category, y=energy, color = category)) + geom_boxplot() +
   labs(x = "Energy", y = "Density", 
-       title = "Comparing the Distribution of Energy Between Indie Subgenres",
-       color = "Indie Subgenres") 
+       title = "Comparing the Distribution of Energy Between Indie Subgenres") 
 ggplotly(dens_energy)
 ```
 
 *** 
-This histogram shows that energy is widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the "Indie" label. What is clear, however, is that Spotify's "Indie Rock" playlist holds the songs with the most energy. Hence, Indie Rock separates itself from the other two subgenres through Spotify's energy audio feature.
+This boxplot shows that energy is widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the "Indie" label. What is clear, however, is that Spotify's "Indie Rock" playlist holds the songs with the most energy, since the song with the lowest energy has an energy of 0.5. Hence, Indie Rock separates itself from the other two subgenres through Spotify's energy audio feature.
 
 ### Indie Rock Has The Energy, Indie Folk Is For The Feels, Indie Pop Is Undecided {data-commentary-width=400}
 ```{r}
@@ -185,7 +184,7 @@ When comparing these four chromagrams, we can see that the two songs with high e
 Self-Similarity Matrices {.storyboard data-navmenu="A Closer Look"}
 ==================================
 
-### The Typical Indie Rock Song "A-Punk" by Vampire Weekend: Simple Chroma & Complex Timbre {data-commentary-width=400}
+### Typical Indie Rock: Simple Chroma & Complex Timbre {data-commentary-width=400}
 ``` {r}
 a_punk <-
   get_tidy_audio_analysis("3AydAydLzyyZutA0375XIz") |> # Change URI.
@@ -241,7 +240,7 @@ a_punk_timbre <- a_punk |>
   theme_classic() +
   labs(x = "", y = "", title = "Timbre-Based Self-Similarity Matrix") + theme(title = element_text(size = 8))
 
-grid.arrange(a_punk_chroma, a_punk_timbre, ncol=2)
+grid.arrange(top = "\"A-Punk\" by Vampire Weekend", a_punk_chroma, a_punk_timbre, ncol=2)
 ```
 
 ***
