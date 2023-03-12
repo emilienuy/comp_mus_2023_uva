@@ -164,7 +164,7 @@ grid.arrange(j_lullaby_plot, live_once_plot, naked_plot, wolf_plot, ncol=2)
 Column {data-width=300}
 -----------------------------------
 #### Chromagrams
-A chromagram shows blabla
+To the left are four chromagrams of four different songs that are interesting to compare. A chromagram is a visual representation of the pitch of a piece of music. It shows how much energy is contained in each pitch class at any given moment. 
 
 #### Analysis
 Here we are comparing songs with different extreme levels of energy and valence. As discussed earlier, "j's lullaby" by Delaney Bailey is the song in the corpus with the lowest energy and valence. On the extreme opposite, "You Only Live Once" by The Strokes is one of the songs with the highest energy and highest valence. The other two songs displayed have an atypical combination of opposing energy and valences. The Indie Folk song "Naked As We Came" has low energy and high valence, while "Wolk Like Me" has high energy and low valence.
@@ -172,11 +172,10 @@ Here we are comparing songs with different extreme levels of energy and valence.
 When comparing these four chromagrams, we can see that the two songs with high energy, "You Only Live Once" and "Wolf Like Me," have their signal's energy more widespread over all the pitch classes. "Wolf Like Me" has much of its energy contained in pitch class B, but the other pitch classes still have some energy (hints of yellow) displayed. "You Only Live Once" has much of its energy contained in pitch classes E and B, but again most of the energy is spread out across all the pitch classes. By contrast, the two songs with low energy have more distinct pitch classes. "j's lullaby" has most of it's energy focused on pitch classes C# and G#, and "Naked As We Come" has most of its energy contained in pitch classes E and B.
 
 
-Self-Similarity Matrices {data-navmenu="A Closer Look"}
+Self-Similarity Matrices {.storyboard data-navmenu="A Closer Look"}
 ==================================
 
-### "A-Punk" by Vampire Weekend, A Typical Indie Rock Song
-
+### The Typical Indie Rock Song "A-Punk" by Vampire Weekend: Simple Chroma & Complex Timbre {data-commentary-width=400}
 ``` {r}
 a_punk <-
   get_tidy_audio_analysis("3AydAydLzyyZutA0375XIz") |> # Change URI.
@@ -213,7 +212,7 @@ a_punk_chroma <- a_punk |>
   coord_fixed() +
   scale_fill_viridis_c(guide = "none") +
   theme_classic() +
-  labs(x = "", y = "", title = "Chroma-based Self-Similarity Matrix") + theme(title = element_text(size = 10))
+  labs(x = "", y = "", title = "Chroma-based Self-Similarity Matrix") + theme(title = element_text(size = 8))
 
 a_punk_timbre <- a_punk |>
   compmus_self_similarity(timbre, "cosine") |> # change timbre/pitches
@@ -230,11 +229,20 @@ a_punk_timbre <- a_punk |>
   coord_fixed() +
   scale_fill_viridis_c(guide = "none") +
   theme_classic() +
-  labs(x = "", y = "", title = "Timbre-Based Self-Similarity Matrix") + theme(title = element_text(size = 10))
+  labs(x = "", y = "", title = "Timbre-Based Self-Similarity Matrix") + theme(title = element_text(size = 8))
 
 grid.arrange(a_punk_chroma, a_punk_timbre, ncol=2)
 ```
 
 ***
+A self-similarity shows the degree of similarity between different parts of a musical piece. It helps us understand how a song is structured through both its pitch (chroma) and timbre.
+
+The self-similarity matrices on the right are those of a song by the Vampire Weekend. The Vampire Weekend is a known Indie Rock band. There debut album "Vampire Weekend" was independently released in 2008, hence officially falling under the "Indie" label. "A-Punk" is an energetic and youthful song that starts with a light-hearted guitar riff which is joined by drums and vocals.
+
+It is short song with the following structure: verse, chorus, refrain, verse, chorus refrain. We can see this pattern in the chroma-based matrix: 0-40s is verse 1, 40-60s is chorus & refrain, 60-100s is verse 2, and then back to chorus and refrain. The chroma-based matrix helps us see this clear structure of the song. This pattern is most likely why the song has become so popular. The simple structure makes the song simple to follow and fun to dance to.
+
+The timbre-based matrix is more interesting to look at. At 40 seconds, the first change in timbre is marked by the flute entering the song, which gives the song an extra layer of timbre complexity. At 60 seconds, the cymbal is abruptly played alone, followed by a vocal "hey hey hey" with no instrumental background, and then the drums come back in to move onto the next verse. This is the part of the song that gives the listener anticipation for what is coming next. After the second verse, the flute comes back followed by the "hey hey hey." At the end of the song (~130s), the cymbal comes back abruptly alone marking the end of the song.
+
+This typical indie rock song shows that the changes pitches and vocals are not as important as the changes in timbre in indie rock. The instruments of the bands play an important role in creating a successful indie rock song.
 
 
