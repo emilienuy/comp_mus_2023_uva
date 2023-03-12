@@ -12,6 +12,17 @@ library(spotifyr)
 library(compmus)
 library(plotly)
 library(gridExtra)
+
+folk <- get_playlist_audio_features("", "6P82OCSEpo1VrZ4TZ2W5jK")
+pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
+rock <- get_playlist_audio_features("","5dMoFfrgm8aOOkneQjt6LT")
+
+indie <-
+  bind_rows(
+    folk |> mutate(category = "Indie Folk"),
+    pop |> mutate(category = "Indie Pop"),
+    rock |> mutate(category= "Indie Rock")
+  )
 ```
 
 Introduction
@@ -26,27 +37,26 @@ Introduction
 ```
 
 
-Comparing the Three Subgenres {.storyboard}
+Comparing the Three Playlists {.storyboard}
 ===========================================================
+
+### Indie Keys
+```{r}
+key_histogram <- ggplot(indie, aes(x=key, color=category,fill=category)) + geom_histogram(binwidth = 1, alpha=0.6) + scale_x_continuous(breaks = c(0:11), labels=c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B")) + 
+  facet_wrap(~category) + labs(y = "Count", x="Key", title = "Comparing the Distribution of Key/nBetween Indie Subgenres") + theme(legend.title = element_blank())
+ggplotly(key_histogram)
+```
+***
+DESCRIPTION
+
 
 ### Indie Rock is Energetic
 ```{r}
-folk <- get_playlist_audio_features("", "6P82OCSEpo1VrZ4TZ2W5jK")
-pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
-rock <- get_playlist_audio_features("","5dMoFfrgm8aOOkneQjt6LT")
-
-indie <-
-  bind_rows(
-    folk |> mutate(category = "Indie Folk"),
-    pop |> mutate(category = "Indie Pop"),
-    rock |> mutate(category= "Indie Rock")
-  )
-
 dens_energy <- ggplot(indie, aes(x = energy, color = category)) + geom_histogram(fill="white") + facet_wrap(~category) + 
   labs(x = "Energy", y = "Density", 
        title = "Comparing the Distribution of Energy Between Indie Subgenres",
        color = "Indie Subgenres") 
-dens_energy
+ggplotly(dens_energy)
 ```
 
 *** 
@@ -246,3 +256,61 @@ The timbre-based matrix is more interesting to look at. At 40 seconds, the first
 This typical indie rock song shows that the changes pitches and vocals are not as important as the changes in timbre in indie rock. The instruments of the bands play an important role in creating a successful indie rock song.
 
 
+### Typical Indie Folk: Simple Chroma & Simple Timbre {data-commentary-width=400}
+``` {r}
+flightless <-
+  get_tidy_audio_analysis("3AydAydLzyyZutA0375XIz") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+          compmus_summarise, pitches,
+          method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+          compmus_summarise, timbre,
+          method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+flightless_chroma <- flightless |>
+  compmus_self_similarity(pitches, "cosine") |> # change timbre/pitches
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "", title = "Chroma-based Self-Similarity Matrix") + theme(title = element_text(size = 8))
+
+flightless_timbre <- flightless |>
+  compmus_self_similarity(timbre, "cosine") |> # change timbre/pitches
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "", title = "Timbre-Based Self-Similarity Matrix") + theme(title = element_text(size = 8))
+
+grid.arrange(top="\"Flightless Bird, American Mouth\" by Iron & Wine", flightless_chroma, flightless_timbre, ncol=2)
+```
