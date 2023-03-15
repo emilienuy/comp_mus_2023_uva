@@ -43,16 +43,6 @@ Indie folk combines the catchy melodies of indie rock with the acoustical sounds
 Comparing the Three Playlists {.storyboard}
 ===========================================================
 
-### Indie Keys
-```{r}
-key_histogram <- ggplot(indie, aes(x=key, color=category,fill=category)) + geom_histogram(binwidth = 1, alpha=0.6) + scale_x_continuous(breaks = c(0:11), labels=c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B")) + 
-  facet_wrap(~category) + labs(y = "Count", x="Key", title = "Comparing the Distribution of Key Between Indie Subgenres")
-ggplotly(key_histogram)
-```
-***
-This histogram shows the distribution of keys in each indie subgenre playlist. The most common used keys in Indie Pop are C and C#. This is to be expected, as C and G major are the most common key used in pop music. Although G major is one of the most common keys used in pop music, G is surprisingly the least common key in Indie Pop. Hence, indie pop follows the pop-genre norm when it comes to having songs with C as a key, but the minority of the songs are in the key of G. The other two indie genres have a less distinct majority key. Indie Folk has the majority of its songs in the keys C, D, E, and F, and the minority in keys G# and A#. Indie Rock has the majority of its songs in the keys C, D, G, and A, and the minority in keys D#, G#, and A#. C is thus the most common key used in all three genres, followed by D. Overall, the keys used in each subgenre are widespread, with some more and others less common.
-
-
 ### Indie Rock is Energetic
 ```{r}
 dens_energy <- ggplot(indie, aes(x = category, y=energy, color = category)) + geom_boxplot() +
@@ -323,8 +313,20 @@ Iron & Wine is an American indie folk singer-songwriter. His songs have the typi
 The self-similarity matrices we see on the left are to be expected. FINISH DESCRIPTION
 
 
-Chordogram/Keygrams {.storyboard data-navmenu="A Closer Look"}
+Indie Keys and Chords {.storyboard data-navmenu="A Closer Look"}
 =====================================
+
+### Indie Keys 
+```{r}
+indie <- indie |> mutate(mode = ifelse(mode==0, "Minor", "Major"))
+key_histogram <- ggplot(indie, aes(x=key, color=category,fill=category)) + geom_histogram(binwidth = 1, alpha=0.6) + scale_x_continuous(breaks = c(0:11), labels=c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B")) + 
+  facet_wrap(~category) + labs(y = "Count", x="Key", title = "Comparing the Distribution of Key Between Indie Subgenres")
+ggplotly(key_histogram)
+```
+***
+This histogram shows the distribution of keys in each indie subgenre playlist. The most common used keys in Indie Pop are C and C#. This is to be expected, as C and G major are the most common key used in pop music. Although G major is one of the most common keys used in pop music, G is surprisingly the least common key in Indie Pop. Hence, indie pop follows the pop-genre norm when it comes to having songs with C as a key, but the minority of the songs are in the key of G. The other two indie genres have a less distinct majority key. Indie Folk has the majority of its songs in the keys C, D, E, and F, and the minority in keys G# and A#. Indie Rock has the majority of its songs in the keys C, D, G, and A, and the minority in keys D#, G#, and A#. C is thus the most common key used in all three genres, followed by D. Overall, the keys used in each subgenre are widespread, with some more and others less common.
+
+
 ### "White Winter Hymnal" by Fleet Foxes {data-commentary-width=500}
 ``` {r}
 circshift <- function(v, n) {
