@@ -309,9 +309,72 @@ grid.arrange(top="\"Flightless Bird, American Mouth\" by Iron & Wine", flightles
 ```
 
 *** 
-Iron & Wine is an American indie folk singer-songwriter. His songs have the typical indie folk sound, which is confirmed by the fact that 2 out of the 50 songs in Spotify's "Indie Folk" playlist are his, but he has never been an independent artist. His first album "The Creek Drank the Cradle" was released in 2002 on the Sub Pop label. Hence, "Flightless Bird, American Mouth" by Iron & Wine is an interesting song to analyze as it is labeled an indie song, but was not indepently released. 
+Iron & Wine is an American indie folk singer-songwriter. His songs have the typical indie folk sound, which is confirmed by the fact that 2 out of the 50 songs in Spotify's "Indie Folk" playlist are his, but he has never been an independent artist. His first album "The Creek Drank the Cradle" was released in 2002 on the Sub Pop label. Hence, "Flightless Bird, American Mouth" by Iron & Wine is an interesting song to analyze as it is labeled an indie song, but was not independently released. 
 
-The self-similarity matrices we see on the left are to be expected. FINISH DESCRIPTION
+The self-similarity matrices we see on the left are to be expected. The only two instruments used during the song are the guitar and tambourine and the vocals indicate the structure of the song: verse 1, chorus, verse 2, chorus. Both verses have the same melody, but different lyrics. The chroma-based self-similarity matrix shows the constant pitch used throughout the song, as it does indicate a clear structure to the song. The timbre-based matrix is also quite unvaried further demonstrating the consistency and repetition of a typical Indie song.
+
+
+### Typical Indie Pop: Simple Chroma & Simple Timbre {data-commentary-width=400}
+``` {r}
+in_love <-
+  get_tidy_audio_analysis("0uBdQzKghx88d2Lp8SLFKJ") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+          compmus_summarise, pitches,
+          method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+          compmus_summarise, timbre,
+          method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+in_love_chroma <- flightless |>
+  compmus_self_similarity(pitches, "cosine") |> # change timbre/pitches
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "", title = "Chroma-based Self-Similarity Matrix") + theme(title = element_text(size = 8))
+
+in_love_timbre <- flightless |>
+  compmus_self_similarity(timbre, "cosine") |> # change timbre/pitches
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "", title = "Timbre-Based Self-Similarity Matrix") + theme(title = element_text(size = 8))
+
+grid.arrange(top="\"I'm In Love With You\" by The 1975", in_love_chroma, in_love_timbre, ncol=2)
+```
+
+*** 
+The third song we will analyze is "I'm In Love With You" by The 1975. The 1975 is a popular indie band. CONTINUE DESCRIPTION
 
 
 Indie Keys and Chords {.storyboard data-navmenu="A Closer Look"}
