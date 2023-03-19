@@ -12,6 +12,7 @@ library(spotifyr)
 library(compmus)
 library(plotly)
 library(gridExtra)
+library(dplyr)
 
 folk <- get_playlist_audio_features("", "6P82OCSEpo1VrZ4TZ2W5jK")
 pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
@@ -451,3 +452,27 @@ winter_hymnal |>
 A chordogram is a visual representation of the different chords used in a song at any given time. These are made by comparing the chords in the audio recording of the song to a template of predefined chord models. The darker sections in the chordogram are, the more similar those chords are to the template, meaning this chord is being played at a particular time.
 
 "White Winter Hymnal" by Fleet Foxes is another typical indie folk song. It is very repetitive in its melody and lyrics. Its structure consists of an intro followed by the chorus three times. This is very characteristic of indie folk music. The only thing that truly changes throughout the song is the chords used throughout. This chordogram shows that "White Winter Hymnal" uses distinct chords during distinct sections of the song. From 0 to 30s, the song is in an E7 chord, this is the intro of the song. From 30 to 40s, the song goes down to an A7 chord, marking a transition between the intro and the first chorus. From 40 to 60s, the chord goes back to E7 for the chorus. From 60 to 70s, the song goes further down to an F# minor, marking another transtion from the first chorus to the second chorus, and so on. What is interesting to see is that the band marking the chord G-flat 7 is dark throughout the whole chordogram. This is the base chord the song is centered around and then the variation throughout the song indicates the different sections of the song.
+
+
+Exploring Tempo {.storyboard data-navmenu="A Closer Look"}
+=====================================
+
+### Indie Rock is the Fastest, Folk is more Relaxed
+```{r}
+
+temp <- indie %>%
+  group_by(category) %>%
+  summarise(temp_mean = mean(tempo))
+
+tempo_hist <- ggplot(indie, aes(x=tempo, color=category,fill=category)) +
+  geom_histogram(binwidth = 10, alpha=0.6) +
+  geom_density() +
+  labs(y = "Count", x="Tempo", title = "Comparing the Distribution of Tempo Between Indie Subgenres") +
+  geom_vline(temp, mapping = aes(xintercept = temp_mean),col="purple") + 
+  facet_wrap(~category)
+
+ggplotly(tempo_hist)
+```
+
+***
+Most popular songs today have a tempo between 100 and 140bpm. This histogram shows that the Indie genre tempo generally lies between 90 and 160bpm, which is consistent with the popular tempo. The means of all three playlists, which are represented by the purple line in the graph, are close to 120bpm. Indie rock has the fastest tempo with an average of 127bpm, followed by pop with 124bpm, and lastly folk has slowest mean tempo of 116bpm. A tempo between 109-132bpm is known as "allegro" in Italian musical terms and means fast, quick, and bright. This describes the tempo of most of the Indie songs in the corpus. Indie Folk is a slower form of the genre as its mode is centered around 100bpm; 20% of the songs in this playlist have a tempo of 100bpm. This is considered "allegretto," or moderately fast. Indie rock and pop have their modes centered around 120bpm. Indie pop has the most widespread tempo with two outliers: "Maybe I'm Lonely" by Rachel Chinouriri with a tempo of 50bpm, and "Petrified" by Omar Apollo with a tempo of 200bpm. Indie rock has one song with a tempo of 200bpm called "The Rover" by Interpol. Overall, however, the three playlists follow the same histogram pattern of tempo. 
