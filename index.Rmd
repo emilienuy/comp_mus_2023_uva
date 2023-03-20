@@ -539,3 +539,25 @@ ggplotly(tempo_hist)
 
 ***
 Most popular songs today have a tempo between 100 and 140bpm. This histogram shows that the Indie genre tempo generally lies between 90 and 160bpm, which is consistent with the popular tempo. The means of all three playlists, which are represented by the purple line in the graph, are close to 120bpm. Indie rock has the fastest tempo with an average of 127bpm, followed by pop with 124bpm, and lastly folk has slowest mean tempo of 116bpm. A tempo between 109-132bpm is known as "allegro" in Italian musical terms and means fast, quick, and bright. This describes the tempo of most of the Indie songs in the corpus. Indie Folk is a slower form of the genre as its mode is centered around 100bpm; 20% of the songs in this playlist have a tempo of 100bpm. This is considered "allegretto," or moderately fast. Indie rock and pop have their modes centered around 120bpm. Indie pop has the most widespread tempo with two outliers: "Maybe I'm Lonely" by Rachel Chinouriri with a tempo of 50bpm, and "Petrified" by Omar Apollo with a tempo of 200bpm. Indie rock has one song with a tempo of 200bpm called "The Rover" by Interpol. Overall, however, the three playlists follow the same histogram pattern of tempo. 
+
+
+### "No Cars Go" by Arcade Fire
+``` {r}
+no_cars_go <- get_tidy_audio_analysis("51xBgzcyzojRpqFW2ICQAB")
+
+no_cars_go |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
+
+no_cars_go |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
+```
