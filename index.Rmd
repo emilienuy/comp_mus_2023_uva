@@ -13,6 +13,9 @@ library(compmus)
 library(plotly)
 library(gridExtra)
 library(dplyr)
+library(tidymodels)
+library(ggdendro)
+library(heatmaply)
 
 folk <- get_playlist_audio_features("", "6P82OCSEpo1VrZ4TZ2W5jK")
 pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
@@ -21,9 +24,9 @@ rock <- get_playlist_audio_features("","5dMoFfrgm8aOOkneQjt6LT")
 indie <-
   bind_rows(
     folk |> mutate(category = "Indie Folk"),
-    pop |> mutate(category = "Indie Pop"),
+    pop |> mutate(category = "Indie Pop") |> slice_head(n = 50),
     rock |> mutate(category= "Indie Rock")
-  )
+  ) 
 ```
 
 
@@ -31,7 +34,7 @@ Introduction
 ===================================== 
 
 ### What makes a song "Indie"? 
-  There is an ongoing debate on whether indie music can be considered a genre. Indie is short for “independent” and refers to music released by an artist independently rather than with a record label. Some bands that are considered to be indie, such as Arcade Fire, however, work with a record label. This begs the question: What makes indie music indie? Some argue that indie music has a specific sound, but what are its defining characteristics that allows Spotify to create “Indie” playlists? I hope to investigate this question with my corpus containing songs from three different indie sub-genre playlists created by Spotify: “Indie Rock Mix,” “Indie Pop Mix,” and “Indie Folk Mix.” Comparing songs from these different sub-genres will clarify what characteristics of a song Spotify considers to be indie. The main limitation of my investigation is that the songs in the playlists are recommended by Spotify for my specific account. Hence, it may not reflect the most popular indie songs nor be representative of indie music as a whole. “The Less I Know the Better” by Tame Impala is a typical indie song in my corpus, because it cannot be tied to another genre. Two atypical songs are “Sunflower” by Harry Styles and “Work Song” by Hozier, because neither of these artists are considered to be indie artists. These songs will be good to analyze since they may have the characteristics of a typical indie song, but they are made by non-indie artists.
+There is an ongoing debate on whether indie music can be considered a genre. Indie is short for “independent” and refers to music released by an artist independently rather than with a record label. Some bands that are considered to be indie, such as Arcade Fire, however, work with a record label. This begs the question: What makes indie music indie? Some argue that indie music has a specific sound, but what are its defining characteristics that allows Spotify to create “Indie” playlists? I hope to investigate this question with my corpus containing songs from three different indie sub-genre playlists created by Spotify: “Indie Rock Mix,” “Indie Pop Mix,” and “Indie Folk Mix.” Comparing songs from these different sub-genres will clarify what characteristics of a song Spotify considers to be indie. The main limitation of my investigation is that the songs in the playlists are recommended by Spotify for my specific account. Hence, it may not reflect the most popular indie songs nor be representative of indie music as a whole. “The Less I Know the Better” by Tame Impala is a typical indie song in my corpus, because it cannot be tied to another genre. Two atypical songs are “Sunflower” by Harry Styles and “Work Song” by Hozier, because neither of these artists are considered to be indie artists. These songs will be good to analyze since they may have the characteristics of a typical indie song, but they are made by non-indie artists.
   
 Indie folk combines the catchy melodies of indie rock with the acoustical sounds of contemporary folk music.
   
@@ -44,7 +47,7 @@ Indie folk combines the catchy melodies of indie rock with the acoustical sounds
 Comparing the Three Playlists {.storyboard}
 ===========================================================
 
-### Indie Rock is Energetic
+### Indie Rock is Energetic {data-commentary-width=400}
 ```{r}
 dens_energy <- ggplot(indie, aes(x = category, y=energy, color = category)) + geom_boxplot() +
   labs(x = "Energy", y = "Density", 
@@ -53,7 +56,9 @@ ggplotly(dens_energy)
 ```
 
 *** 
-This boxplot shows that energy is widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the "Indie" label. What is clear, however, is that Spotify's "Indie Rock" playlist holds the songs with the most energy, since the song with the lowest energy has an energy of 0.5. Hence, Indie Rock separates itself from the other two subgenres through Spotify's energy audio feature.
+Energy is a Spotify track-level feature measured between 0 to 1, with 0 being the lowest energy and 1 the highest. This boxplot shows that energy is widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the overall "Indie" label. What it does show, however, is a difference in energy between the three playlists. Spotify's "Indie Rock" playlist contains the songs with the most energy, with a mean energy of 0.8 and a minimum energy of 0.5. On the other hand, "Indie Folk" has the songs with the least energy with a mean energy of 0.4 and a minimum energy of 0.06. Lastly, "Indie Pop" has its songs' energies spread out the most with a mean of 0.6, a maximum energy of 0.9, and a minimum energy of 0.1. As an indie listener, this difference in energy is not surprising. Indie folk has a calm and mellow feel and usually uses light acoustic instruments, while indie rock can be louder with a faster tempo and more energetic instruments, such as the drumbs and the electric guitar. Indie pop can have both a calm and energetic feel when listening to it, for example the song "j's lullaby" by Delaney Bailey is very slow and quiet, while the song "I'm In Love With You" by The 1975 is much more upbeat.
+
+
 
 ### Indie Rock Has The Energy, Indie Folk Is For The Feels, Indie Pop Is Undecided {data-commentary-width=400}
 ```{r}
@@ -65,7 +70,88 @@ ggplotly(energy_valence)
 
 Consistent with the last histogram, energy and loudness are widespread over the Indie genre as a whole. What can be observed again is that Spotify's "Indie Rock" playlist holds the songs with the most energy and loudness, followed by "Indie Pop" and "Indie Folk." Hence, the energy and loudness features can help us distinguish Indie songs from each other and categorize them into sub-genres. 
 Indie Folk separates itself from the other two sub-genres through the valence feature. Compared to Rock and Pop, most of the Indie Folk songs have a negative valence. In other words, Indie Folk is a sad sub-genre.
-The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres. Another atypical song is "Naked as We Came" by Iron & Wine since it is one of the few songs that is low in energy and loudness but has a positive valence. These songs will be further investigated.
+The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres. Another atypical song is "Naked as We Came" by Iron & Wine since it is one of the few songs that is low in energy and loudness but has a positive valence. These specific songs are investigated further in the "Comparing Pitch" tab.
+In summary, this graph shows a trend in all three sub-genres: as loudness increases, so does energy. Furthermore, the three playlists can be distinguished through different energy and valence features.
+
+
+<!-- ### Clusters -->
+<!-- ```{r} -->
+<!-- ``` -->
+<!-- *** -->
+<!-- Based on Spotify features, these are the clusters. -->
+
+<!-- ### Classification -->
+<!-- ```{r} -->
+<!-- indie <- -->
+<!--   bind_rows( -->
+<!--     pop |> mutate(playlist = "Indie Pop") |> slice_head(n = 50), -->
+<!--     folk |> mutate(playlist = "Indie Folk") |> slice_head(n = 50), -->
+<!--     rock |> mutate(playlist = "Indie Rock") |> slice_head(n = 50) -->
+<!--   ) |> -->
+<!--   add_audio_analysis() -->
+
+<!-- indie_features <- -->
+<!--   indie |>  # For your portfolio, change this to the name of your corpus. -->
+<!--   mutate( -->
+<!--     playlist = factor(playlist), -->
+<!--     segments = map2(segments, key, compmus_c_transpose), -->
+<!--     pitches = -->
+<!--       map( -->
+<!--         segments, -->
+<!--         compmus_summarise, pitches, -->
+<!--         method = "mean", norm = "manhattan" -->
+<!--       ), -->
+<!--     timbre = -->
+<!--       map( -->
+<!--         segments, -->
+<!--         compmus_summarise, timbre, -->
+<!--         method = "mean", -->
+<!--       ) -->
+<!--   ) |> -->
+<!--   mutate(pitches = map(pitches, compmus_normalise, "clr")) |> -->
+<!--   mutate_at(vars(pitches, timbre), map, bind_rows) |> -->
+<!--   unnest(cols = c(pitches, timbre)) -->
+
+<!-- indie_recipe <- -->
+<!--   recipe( -->
+<!--     playlist ~ -->
+<!--       danceability + -->
+<!--       energy + -->
+<!--       loudness + -->
+<!--       speechiness + -->
+<!--       acousticness + -->
+<!--       instrumentalness + -->
+<!--       liveness + -->
+<!--       valence + -->
+<!--       tempo + -->
+<!--       duration + -->
+<!--       C + `C#|Db` + D + `D#|Eb` + -->
+<!--       E + `F` + `F#|Gb` + G + -->
+<!--       `G#|Ab` + A + `A#|Bb` + B + -->
+<!--       c01 + c02 + c03 + c04 + c05 + c06 + -->
+<!--       c07 + c08 + c09 + c10 + c11 + c12, -->
+<!--     data = indie_features           # Use the same name as the previous block. -->
+<!--   ) |> -->
+<!--   step_center(all_predictors()) |> -->
+<!--   step_scale(all_predictors()) -->
+
+<!-- indie_cv <- indie_features |> vfold_cv(5) -->
+
+<!-- knn_model <- -->
+<!--   nearest_neighbor(neighbors = 1) |> -->
+<!--   set_mode("classification") |> -->
+<!--   set_engine("kknn") -->
+<!-- indie_knn <- -->
+<!--   workflow() |> -->
+<!--   add_recipe(indie_recipe) |> -->
+<!--   add_model(knn_model) |> -->
+<!--   fit_resamples(indie_cv, control = control_resamples(save_pred = TRUE)) -->
+
+<!-- indie_knn |> get_conf_mat() |> autoplot(type = "mosaic") -->
+<!-- ``` -->
+
+
+
 
 
 Comparing Pitch {data-navmenu="A Closer Look"}
@@ -336,7 +422,7 @@ in_love <-
       )
   )
 
-in_love_chroma <- flightless |>
+in_love_chroma <- in_love |>
   compmus_self_similarity(pitches, "cosine") |> # change timbre/pitches
   ggplot(
     aes(
@@ -353,7 +439,7 @@ in_love_chroma <- flightless |>
   theme_classic() +
   labs(x = "", y = "", title = "Chroma-based Self-Similarity Matrix") + theme(title = element_text(size = 8))
 
-in_love_timbre <- flightless |>
+in_love_timbre <- in_love |>
   compmus_self_similarity(timbre, "cosine") |> # change timbre/pitches
   ggplot(
     aes(
@@ -382,7 +468,6 @@ Indie Keys and Chords {.storyboard data-navmenu="A Closer Look"}
 
 ### Indie Keys 
 ```{r}
-indie <- indie |> mutate(mode = ifelse(mode==0, "Minor", "Major"))
 key_histogram <- ggplot(indie, aes(x=key, color=category,fill=category)) + geom_histogram(binwidth = 1, alpha=0.6) + scale_x_continuous(breaks = c(0:11), labels=c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B")) + 
   facet_wrap(~category) + labs(y = "Count", x="Key", title = "Comparing the Distribution of Key Between Indie Subgenres")
 ggplotly(key_histogram)
@@ -541,23 +626,23 @@ ggplotly(tempo_hist)
 Most popular songs today have a tempo between 100 and 140bpm. This histogram shows that the Indie genre tempo generally lies between 90 and 160bpm, which is consistent with the popular tempo. The means of all three playlists, which are represented by the purple line in the graph, are close to 120bpm. Indie rock has the fastest tempo with an average of 127bpm, followed by pop with 124bpm, and lastly folk has slowest mean tempo of 116bpm. A tempo between 109-132bpm is known as "allegro" in Italian musical terms and means fast, quick, and bright. This describes the tempo of most of the Indie songs in the corpus. Indie Folk is a slower form of the genre as its mode is centered around 100bpm; 20% of the songs in this playlist have a tempo of 100bpm. This is considered "allegretto," or moderately fast. Indie rock and pop have their modes centered around 120bpm. Indie pop has the most widespread tempo with two outliers: "Maybe I'm Lonely" by Rachel Chinouriri with a tempo of 50bpm, and "Petrified" by Omar Apollo with a tempo of 200bpm. Indie rock has one song with a tempo of 200bpm called "The Rover" by Interpol. Overall, however, the three playlists follow the same histogram pattern of tempo. 
 
 
-### "No Cars Go" by Arcade Fire
-``` {r}
-no_cars_go <- get_tidy_audio_analysis("51xBgzcyzojRpqFW2ICQAB")
+<!-- ### "No Cars Go" by Arcade Fire -->
+<!-- ``` {r} -->
+<!-- no_cars_go <- get_tidy_audio_analysis("51xBgzcyzojRpqFW2ICQAB") -->
 
-no_cars_go |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
+<!-- no_cars_go |> -->
+<!--   tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |> -->
+<!--   ggplot(aes(x = time, y = bpm, fill = power)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis_c(guide = "none") + -->
+<!--   labs(x = "Time (s)", y = "Tempo (BPM)") + -->
+<!--   theme_classic() -->
 
-no_cars_go |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
-```
+<!-- no_cars_go |> -->
+<!--   tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |> -->
+<!--   ggplot(aes(x = time, y = bpm, fill = power)) + -->
+<!--   geom_raster() + -->
+<!--   scale_fill_viridis_c(guide = "none") + -->
+<!--   labs(x = "Time (s)", y = "Tempo (BPM)") + -->
+<!--   theme_classic() -->
+<!-- ``` -->
