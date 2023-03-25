@@ -69,89 +69,9 @@ ggplotly(energy_valence)
 ***
 
 Consistent with the last histogram, energy and loudness are widespread over the Indie genre as a whole. What can be observed again is that Spotify's "Indie Rock" playlist holds the songs with the most energy and loudness, followed by "Indie Pop" and "Indie Folk." Hence, the energy and loudness features can help us distinguish Indie songs from each other and categorize them into sub-genres. 
-Indie Folk separates itself from the other two sub-genres through the valence feature. Compared to Rock and Pop, most of the Indie Folk songs have a negative valence. In other words, Indie Folk is a sad sub-genre.
+Indie Folk separates itself from the other two sub-genres through the valence feature. Valence is measured from 0.0 to 1.0 and describes the musical positivity of a track. A song with a high valence (purple in this graph) is described as sounding happy, while a track with a low valence (yellow) sounds sad. Compared to Rock and Pop, most of the Indie Folk songs have a negative valence. In other words, Indie Folk is a sad sub-genre.
 The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres. Another atypical song is "Naked as We Came" by Iron & Wine since it is one of the few songs that is low in energy and loudness but has a positive valence. These specific songs are investigated further in the "Comparing Pitch" tab.
 In summary, this graph shows a trend in all three sub-genres: as loudness increases, so does energy. Furthermore, the three playlists can be distinguished through different energy and valence features.
-
-
-<!-- ### Clusters -->
-<!-- ```{r} -->
-<!-- ``` -->
-<!-- *** -->
-<!-- Based on Spotify features, these are the clusters. -->
-
-<!-- ### Classification -->
-<!-- ```{r} -->
-<!-- indie <- -->
-<!--   bind_rows( -->
-<!--     pop |> mutate(playlist = "Indie Pop") |> slice_head(n = 50), -->
-<!--     folk |> mutate(playlist = "Indie Folk") |> slice_head(n = 50), -->
-<!--     rock |> mutate(playlist = "Indie Rock") |> slice_head(n = 50) -->
-<!--   ) |> -->
-<!--   add_audio_analysis() -->
-
-<!-- indie_features <- -->
-<!--   indie |>  # For your portfolio, change this to the name of your corpus. -->
-<!--   mutate( -->
-<!--     playlist = factor(playlist), -->
-<!--     segments = map2(segments, key, compmus_c_transpose), -->
-<!--     pitches = -->
-<!--       map( -->
-<!--         segments, -->
-<!--         compmus_summarise, pitches, -->
-<!--         method = "mean", norm = "manhattan" -->
-<!--       ), -->
-<!--     timbre = -->
-<!--       map( -->
-<!--         segments, -->
-<!--         compmus_summarise, timbre, -->
-<!--         method = "mean", -->
-<!--       ) -->
-<!--   ) |> -->
-<!--   mutate(pitches = map(pitches, compmus_normalise, "clr")) |> -->
-<!--   mutate_at(vars(pitches, timbre), map, bind_rows) |> -->
-<!--   unnest(cols = c(pitches, timbre)) -->
-
-<!-- indie_recipe <- -->
-<!--   recipe( -->
-<!--     playlist ~ -->
-<!--       danceability + -->
-<!--       energy + -->
-<!--       loudness + -->
-<!--       speechiness + -->
-<!--       acousticness + -->
-<!--       instrumentalness + -->
-<!--       liveness + -->
-<!--       valence + -->
-<!--       tempo + -->
-<!--       duration + -->
-<!--       C + `C#|Db` + D + `D#|Eb` + -->
-<!--       E + `F` + `F#|Gb` + G + -->
-<!--       `G#|Ab` + A + `A#|Bb` + B + -->
-<!--       c01 + c02 + c03 + c04 + c05 + c06 + -->
-<!--       c07 + c08 + c09 + c10 + c11 + c12, -->
-<!--     data = indie_features           # Use the same name as the previous block. -->
-<!--   ) |> -->
-<!--   step_center(all_predictors()) |> -->
-<!--   step_scale(all_predictors()) -->
-
-<!-- indie_cv <- indie_features |> vfold_cv(5) -->
-
-<!-- knn_model <- -->
-<!--   nearest_neighbor(neighbors = 1) |> -->
-<!--   set_mode("classification") |> -->
-<!--   set_engine("kknn") -->
-<!-- indie_knn <- -->
-<!--   workflow() |> -->
-<!--   add_recipe(indie_recipe) |> -->
-<!--   add_model(knn_model) |> -->
-<!--   fit_resamples(indie_cv, control = control_resamples(save_pred = TRUE)) -->
-
-<!-- indie_knn |> get_conf_mat() |> autoplot(type = "mosaic") -->
-<!-- ``` -->
-
-
-
 
 
 Comparing Pitch {data-navmenu="A Closer Look"}
@@ -253,12 +173,22 @@ grid.arrange(j_lullaby_plot, live_once_plot, naked_plot, wolf_plot, ncol=2)
 Column {data-width=300}
 -----------------------------------
 #### Chromagrams
-To the left are four chromagrams of four different songs that are interesting to compare. A chromagram is a visual representation of the pitch of a piece of music. It shows how much energy is contained in each pitch class at any given moment. 
+A chromagram is a visual representation of the pitch of a piece of music. It shows how much energy is contained in each pitch class at any given moment. These chromagrams of four different songs are interesting to compare, as each song has a different extreme level of valence and energy.
 
 #### Analysis
-Here we are comparing songs with different extreme levels of energy and valence. As discussed earlier, "j's lullaby" by Delaney Bailey is the song in the corpus with the lowest energy and valence. On the extreme opposite, "You Only Live Once" by The Strokes is one of the songs with the highest energy and highest valence. The other two songs displayed have an atypical combination of opposing energy and valences. The Indie Folk song "Naked As We Came" has low energy and high valence, while "Wolk Like Me" has high energy and low valence.
+As discussed earlier, "j's lullaby" by Delaney Bailey is the song in the corpus with the lowest energy and valence. On the opposite extreme, "You Only Live Once" by The Strokes is one of the songs with the highest energy and highest valence. The other two songs displayed have an atypical combination of opposing energy and valences. The Indie Folk song "Naked As We Came" has low energy and high valence, while "Wolk Like Me" has high energy and low valence.
 
-When comparing these four chromagrams, we can see that the two songs with high energy, "You Only Live Once" and "Wolf Like Me," have their signal's energy more widespread over all the pitch classes. "Wolf Like Me" has much of its energy contained in pitch class B, but the other pitch classes still have some energy (hints of yellow) displayed. "You Only Live Once" has much of its energy contained in pitch classes E and B, but again most of the energy is spread out across all the pitch classes. By contrast, the two songs with low energy have more distinct pitch classes. "j's lullaby" has most of it's energy focused on pitch classes C# and G#, and "Naked As We Come" has most of its energy contained in pitch classes E and B.
+When comparing these four chromagrams at first glance, we can see that the two songs with high energy, "You Only Live Once" and "Wolf Like Me," have their signal's energy more widespread over all the pitch classes. Overall, their chromagrams have hints of yellow in almost every pitch class, while "j's lullaby" and "Naked As We Came" chromograms have their energy more contained in specific pitch classes.
+
+"j's lullaby" has most of its energy focused in pitch class A-flat, and some of its energy in D-flat. When listening to the song, the A-flat and D-flat major keys give the song a calm, sad, nostalgic tone.
+
+"Naked As We Came" has most of its energy contained in pitch classes E and B. The song is indeed written in an E major key. We can observe at around 45 seconds the energy moves from pitch class E to pitch class F-sharp, and then moves back to E at 65 seconds. This happens again at 100 seconds into the song. Although the song is low in energy and has a calm tone to it, the E major key gives the song a joyful mood.
+
+"You Only Live Once" has most of its energy contained in pitch classes E and B. During the first 20 seconds, the song's energy is mostly contained in E, and then it splits alternating between E and B. At 160 seconds, the song abruptly moves all of its energy contained in pitch class B. This shift in pitch marks the last 30 seconds of the song characterized by a build up of energy. This Strokes song is written in B major, which helps set the harsh and angry tone the song projects. The E major, which is usually characterized by a happy tone, detected by Spotify could indicate why the valence of the song is positive.
+
+"Wolf Like Me" has most of its energy contained in pitch class B with some alternation to pitch G. Because the song is written in B major, which has an angry tone, this could be a reason for Spotify's valence measure being low, despite being high in energy.
+
+Overall, the four songs do not have too much pitch variation, with most of their energies contained in one or two pitch classes. This could be an indicator of the "Indie" genre. As an indie listener, I would agree with this observation as most indie songs are written based on one key and do not deviate much from it.
 
 
 Self-Similarity Matrices {.storyboard data-navmenu="A Closer Look"}
