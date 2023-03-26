@@ -56,7 +56,7 @@ ggplotly(dens_energy)
 ```
 
 *** 
-Energy is a Spotify track-level feature measured between 0 to 1, with 0 being the lowest energy and 1 the highest. This boxplot shows that energy is widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the overall "Indie" label. What it does show, however, is a difference in energy between the three playlists. Spotify's "Indie Rock" playlist contains the songs with the most energy, with a mean energy of 0.8 and a minimum energy of 0.5. On the other hand, "Indie Folk" has the songs with the least energy with a mean energy of 0.4 and a minimum energy of 0.06. Lastly, "Indie Pop" has its songs' energies spread out the most with a mean of 0.6, a maximum energy of 0.9, and a minimum energy of 0.1. As an indie listener, this difference in energy is not surprising. Indie folk has a calm and mellow feel and usually uses light acoustic instruments, while indie rock can be louder with a faster tempo and more energetic instruments, such as the drumbs and the electric guitar. Indie pop can have both a calm and energetic feel when listening to it, for example the song "j's lullaby" by Delaney Bailey is very slow and quiet, while the song "I'm In Love With You" by The 1975 is much more upbeat.
+Energy is a Spotify track-level feature measured between 0 to 1, with 0 being the lowest energy and 1 the highest. This boxplot shows that energy is widespread over the Indie genre as a whole. A song's energy cannot tell us whether it belongs under the general "Indie" label. What it does show, however, is a difference in energy between the three playlists. Spotify's "Indie Rock" playlist contains the songs with the most energy, with a mean energy of 0.8 and a minimum energy of 0.5. On the other hand, "Indie Folk" has the songs with the least energy with a mean energy of 0.4 and a minimum energy of 0.06. Lastly, "Indie Pop" has its songs' energies spread out the most with a mean of 0.6, a maximum energy of 0.9, and a minimum energy of 0.1. As an indie listener, this difference in energy is not surprising. Indie folk has a calm and mellow feel and usually uses light acoustic instruments, while indie rock can be louder with a faster tempo and more energetic instruments, such as the drumbs and the electric guitar. Indie pop can have both a calm and energetic feel when listening to it, for example the song "j's lullaby" by Delaney Bailey is very slow and quiet, while the song "I'm In Love With You" by The 1975 is much more upbeat.
 
 
 
@@ -68,10 +68,12 @@ ggplotly(energy_valence)
 
 ***
 
-Consistent with the last histogram, energy and loudness are widespread over the Indie genre as a whole. What can be observed again is that Spotify's "Indie Rock" playlist holds the songs with the most energy and loudness, followed by "Indie Pop" and "Indie Folk." Hence, the energy and loudness features can help us distinguish Indie songs from each other and categorize them into sub-genres. 
-Indie Folk separates itself from the other two sub-genres through the valence feature. Valence is measured from 0.0 to 1.0 and describes the musical positivity of a track. A song with a high valence (purple in this graph) is described as sounding happy, while a track with a low valence (yellow) sounds sad. Compared to Rock and Pop, most of the Indie Folk songs have a negative valence. In other words, Indie Folk is a sad sub-genre.
-The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres. Another atypical song is "Naked as We Came" by Iron & Wine since it is one of the few songs that is low in energy and loudness but has a positive valence. These specific songs are investigated further in the "Comparing Pitch" tab.
-In summary, this graph shows a trend in all three sub-genres: as loudness increases, so does energy. Furthermore, the three playlists can be distinguished through different energy and valence features.
+This graph shows a consistent trend in all three sub-genres: as loudness increases, so does energy. Consistent with the last histogram, energy and loudness are widespread over the Indie genre as a whole. What can be observed again is that Spotify's "Indie Rock" playlist holds the songs with the most energy and loudness, followed by "Indie Pop" and "Indie Folk." Hence, the energy and loudness features can help us distinguish Indie songs from each other and categorize them into sub-genres. 
+
+Indie folk separates itself from the other two sub-genres through the valence feature. Valence is measured from 0.0 to 1.0 and describes the musical positivity of a track. A song with a high valence (purple in this graph) is described as sounding happy, while a track with a low valence (yellow) sounds sad. Compared to rock and pop, most of the indie folk songs have a negative valence. In other words, Indie Folk is a sad sub-genre.
+
+The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres. It is indeed a very mellow and calm song. Another atypical song is "Naked as We Came" by Iron & Wine since it is one of the few songs that is low in energy and loudness but has a positive valence. These specific songs are analyzed further in the "Comparing Pitch" tab.
+
 
 
 Comparing Pitch {data-navmenu="A Closer Look"}
@@ -170,21 +172,22 @@ wolf_plot <- wolf |>
 grid.arrange(j_lullaby_plot, live_once_plot, naked_plot, wolf_plot, ncol=2)
 ```
 
-Column {data-width=300}
+Column {data-width=400 .tabset}
 -----------------------------------
-#### Chromagrams
+### Chromagrams
 A chromagram is a visual representation of the pitch of a piece of music. It shows how much energy is contained in each pitch class at any given moment. These chromagrams of four different songs are interesting to compare, as each song has a different extreme level of valence and energy.
 
-#### Analysis
 As discussed earlier, "j's lullaby" by Delaney Bailey is the song in the corpus with the lowest energy and valence. On the opposite extreme, "You Only Live Once" by The Strokes is one of the songs with the highest energy and highest valence. The other two songs displayed have an atypical combination of opposing energy and valences. The Indie Folk song "Naked As We Came" has low energy and high valence, while "Wolk Like Me" has high energy and low valence.
 
-When comparing these four chromagrams at first glance, we can see that the two songs with high energy, "You Only Live Once" and "Wolf Like Me," have their signal's energy more widespread over all the pitch classes. Overall, their chromagrams have hints of yellow in almost every pitch class, while "j's lullaby" and "Naked As We Came" chromograms have their energy more contained in specific pitch classes.
+When comparing these four chromagrams at first glance, we can see that the two songs with high energy, "You Only Live Once" and "Wolf Like Me," have their signal's energy more widespread over all the pitch classes. Overall, their chromagrams have hints of yellow in almost every pitch class, while "j's lullaby" and "Naked As We Came" chromograms have their energy more contained in specific pitch classes. This may be because of the instruments played and the tuning of the instruments. "j's lullaby" and "Naked As We Came" only have the acoustic guitar playing and vocals, while "You Only Live Once" and "Wolf Like Me" use the electric guitar and drums which could lead to a more noisy chromagram.
 
-"j's lullaby" has most of its energy focused in pitch class A-flat, and some of its energy in D-flat. When listening to the song, the A-flat and D-flat major keys give the song a calm, sad, nostalgic tone.
 
-"Naked As We Came" has most of its energy contained in pitch classes E and B. The song is indeed written in an E major key. We can observe at around 45 seconds the energy moves from pitch class E to pitch class F-sharp, and then moves back to E at 65 seconds. This happens again at 100 seconds into the song. Although the song is low in energy and has a calm tone to it, the E major key gives the song a joyful mood.
+### Individual Song Analysis
+"j's lullaby" has most of its energy focused in pitch class A-flat, and some of its energy in D-flat. When listening to the song, the A-flat and D-flat major keys give the song a calm, sad, nostalgic tone, which explains the negative valence measure.
 
-"You Only Live Once" has most of its energy contained in pitch classes E and B. During the first 20 seconds, the song's energy is mostly contained in E, and then it splits alternating between E and B. At 160 seconds, the song abruptly moves all of its energy contained in pitch class B. This shift in pitch marks the last 30 seconds of the song characterized by a build up of energy. This Strokes song is written in B major, which helps set the harsh and angry tone the song projects. The E major, which is usually characterized by a happy tone, detected by Spotify could indicate why the valence of the song is positive.
+"Naked As We Came" has most of its energy contained in pitch classes E and B. The song is indeed written in an E major key. Although the song is low in energy and has a calm tone to it, the E major key gives the song a joyful mood. The song is structured as follows: Verse 1, Chorus, Verse 2, Chorus. Verses 1 and 2 are sung by a male vocalist, and a female voice joins at a different pitch during the chorus. In the chromagram, we observe this pitch change for both choruses: at around 45 seconds the energy moves from pitch class E to F-sharp, and then moves back to E at 65 seconds for Verse 2, this happens again 100 seconds into the song for the second chorus. 
+
+"You Only Live Once" has most of its energy contained in pitch classes E and B. During the first 20 seconds, the song's energy is mostly contained in E, and then it splits alternating between E and B. At 160 seconds, the song abruptly moves all of its energy contained in pitch class B. This shift in pitch marks the last 30 seconds of the song characterized by a build up of energy. This Strokes song is written in B major, which helps set the harsh and angry tone the song projects. The E pitch class that was detected by Spotify, which is usually characterized by a happy tone, could indicate why the valence of the song is positive.
 
 "Wolf Like Me" has most of its energy contained in pitch class B with some alternation to pitch G. Because the song is written in B major, which has an angry tone, this could be a reason for Spotify's valence measure being low, despite being high in energy.
 
