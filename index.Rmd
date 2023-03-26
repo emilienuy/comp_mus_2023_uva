@@ -674,4 +674,151 @@ data_for_indie_clustering |>
 This graph corresponds to hierarchical clustering, which relies on unsupervised machine learning whereby unlabeled songs are grouped together based on their similarity in Spotify's audio feature measurements. In this cluster, the track names are written at the bottom of each branch, and the color corresponds to which playlist they belong to. The songs that are most similar to each other would be closer together at the end of the tree. Here we can observe that through Spotify's audio features, the songs in the "Indie Folk" playlist are clustered together, with most of the songs on top being colored in red. The songs in the "Indie Rock" playlist are also clearly grouped together in blue. This means that Spotify is able to use its audio features to distinguish the two indie sub-genres from each other. In contrast, the "Indie Pop" playlist does not have an obvious cluster. This is consistent with indie pop being spread out in energy and valence which we observed earlier. This could be because indie pop has a less recognizable "sound" to it. Wikipedia describes indie pop as "a music genre and subculture that combines guitar pop with DIY ethic in opposition to the style and tone of mainstream pop music." This "DIY ethic" could be the factor that distinguishes indie pop songs from each other. Artists could have a different spin to a pop sound, making each indie pop song sound slightly different and vary within Spotify's audio features. 
 
 
+### How accurate is the grouping? {data-commentary-width=400}
+``` {r}
+folk <- get_playlist_audio_features("", "6P82OCSEpo1VrZ4TZ2W5jK")
+pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
+rock <- get_playlist_audio_features("","5dMoFfrgm8aOOkneQjt6LT")
+
+indie <-
+  bind_rows(
+    pop |> mutate(playlist = "Indie Pop") |> slice_head(n = 30),
+    folk |> mutate(playlist = "Indie Folk") |> slice_head(n = 30),
+    rock |> mutate(playlist = "Indie Rock") |> slice_head(n = 30)
+  ) |> add_audio_analysis()
+
+get_conf_mat <- function(fit) {
+  outcome <- .get_tune_outcome_names(fit)
+  fit |> 
+    collect_predictions() |> 
+    conf_mat(truth = outcome, estimate = .pred_class)
+}  
+
+get_pr <- function(fit) {
+  fit |> 
+    conf_mat_resampled() |> 
+    group_by(Prediction) |> mutate(precision = Freq / sum(Freq)) |> 
+    group_by(Truth) |> mutate(recall = Freq / sum(Freq)) |> 
+    ungroup() |> filter(Prediction == Truth) |> 
+    select(class = Prediction, precision, recall)
+} 
+
+indie_features <-
+  indie |>  # For your portfolio, change this to the name of your corpus.
+  mutate(
+    playlist = factor(playlist),
+    segments = map2(segments, key, compmus_c_transpose),
+    pitches =
+      map(
+        segments,
+        compmus_summarise, pitches,
+        method = "mean", norm = "manhattan"
+      ),
+    timbre =
+      map(
+        segments,
+        compmus_summarise, timbre,
+        method = "mean",
+      )
+  ) |>
+  mutate(pitches = map(pitches, compmus_normalise, "clr")) |>
+  mutate_at(vars(pitches, timbre), map, bind_rows) |>
+  unnest(cols = c(pitches, timbre))
+
+indie_recipe <-
+  recipe(
+    playlist ~
+      danceability +
+      energy +
+      loudness +
+      speechiness +
+      acousticness +
+      instrumentalness +
+      liveness +
+      valence +
+      tempo +
+      duration +
+      C + `C#|Db` + D + `D#|Eb` +
+      E + `F` + `F#|Gb` + G +
+      `G#|Ab` + A + `A#|Bb` + B +
+      c01 + c02 + c03 + c04 + c05 + c06 +
+      c07 + c08 + c09 + c10 + c11 + c12,
+    data = indie_features           # Use the same name as the previous block.
+  ) |>
+  step_center(all_predictors()) |>
+  step_scale(all_predictors())
+
+indie_cv <- indie_features |> vfold_cv(5)
+
+knn_model <-
+  nearest_neighbor(neighbors = 1) |>
+  set_mode("classification") |> 
+  set_engine("kknn")
+indie_knn <- 
+  workflow() |> 
+  add_recipe(indie_recipe) |> 
+  add_model(knn_model) |> 
+  fit_resamples(indie_cv, control = control_resamples(save_pred = TRUE))
+
+indie_knn |> get_conf_mat() |> autoplot(type = "mosaic")
+```
+
+*** 
+This graph is a classification cross-validation graph. Classification relies on supervised machine learning. In this context, classification predicts which genre songs belong to based on Spotify's audio features. This prediction is then compared to the actual genre the song belongs to in cross-validation. The area of the boxes in this graph correspond to the number of songs that belong to a certain genre based on both prediction and truth. The graph shows that classification using Spotify's audio features is mostly accurate. The prediction has the majority of the songs grouped in the correct sub-genre. About a quarter of the indie folk songs were predicted to be indie pop, a quarter of the indie pop songs were predicted to be folk, and another quarter of the pop songs were predicted to be rock songs. This further shows the variation in the indie pop songs. Because indie pop does not have a distinct sound from the other two sub-genres, the algorithm has a harder time predicting the correct sub-genre. In contrast, indie rock songs are predicted with approximately 80% accuracy and are more easily distinguished. 
+
+
+### Which features are most important for distinguishing the three sub-genres? {data-commentary-width=400}
+``` {r}
+forest_model <-
+  rand_forest() |>
+  set_mode("classification") |> 
+  set_engine("ranger", importance = "impurity")
+indie_forest <- 
+  workflow() |> 
+  add_recipe(indie_recipe) |> 
+  add_model(forest_model) |> 
+  fit_resamples(
+    indie_cv, 
+    control = control_resamples(save_pred = TRUE)
+  )
+
+workflow() |> 
+  add_recipe(indie_recipe) |> 
+  add_model(forest_model) |> 
+  fit(indie_features) |> 
+  pluck("fit", "fit", "fit") |>
+  ranger::importance() |> 
+  enframe() |> 
+  mutate(name = fct_reorder(name, value)) |> 
+  ggplot(aes(name, value)) + 
+  geom_col() + 
+  coord_flip() +
+  theme_minimal() +
+  labs(x = NULL, y = "Importance", title = "Random Forest of Indie Sub-Genre Prediction")
+```
+
+***
+This random forest uses the cross-validation data discussed previously to give us a ranking of feature importance. It measures how useful each Spotify audio feature was for distinguishing the three indie sub-genres. Here we can see that acousticness was the most helpful feature, followed by timbre component 1 and timbre component 2. Timbre refers to the quality of a musical sound that distinguishes different types of musical instruments, or voices. Timbre component 1 refers to the loudness of a song, but, since we already analyzed loudness previously, we will focus on analyzing timbre component 2, which measures a sound's brightness. The next page will further discuss how acousticness and brightness differ between the three playlists.
+
+
+### Indie Folk is Acoustic, Indie Rock is the Brightest, Indie Pop Enjoys Variety {data-commentary-width=400}
+``` {r}
+indie_features |>
+  ggplot(aes(x = acousticness, y = c02, colour = playlist, size = energy)) +
+  geom_point(alpha = 0.8) +
+  scale_color_viridis_d() +
+  labs(
+    x = "Acousticness",
+    y = "Timbre Component 2 (Brightness)",
+    size = "Energy",
+    colour = "Playlist",
+    title = "Brightness, Acousticness, and Energy"
+  )
+```
+
+***
+This graph plots timbre component 2 against acousticness, with the size of the points correspond to the song's energy level. A general trend that is observed is as acousticness increases, brightness decreases. With brightness being negatively correlated with acousticness, we can assume that an acoustic guitar is not considered to be bright according to Spotify's audio features. Indie rock is clearly recognized as being energetic and having a bright timbre sound. This could be because of the electric guitar usually used in indie rock. Another observation we can make is that indie folk is an acoustic sub-genre. This is not surprising at all because most indie folk songs are indeed acoustic. Lastly, consistent with the previous analyses, indie pop has songs with varying amounts of energy, brightness, and acousticness.
+
+
+
 
