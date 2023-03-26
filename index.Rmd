@@ -579,3 +579,99 @@ Most popular songs today have a tempo between 100 and 140bpm. This histogram sho
 <!--   labs(x = "Time (s)", y = "Tempo (BPM)") + -->
 <!--   theme_classic() -->
 <!-- ``` -->
+
+
+Zooming Back Out {.storyboard}
+======================================
+### Can Spotify's Audio Features Group Indie Sub-Genres? {data-commentary-width=400}
+``` {r}
+indie <-
+  bind_rows(
+    folk |> mutate(category = "Indie Folk", playlist_name = "Indie Folk") |> slice_head(n = 30),
+    pop |> mutate(category = "Indie Pop", playlist_name = "Indie Pop") |> slice_head(n = 30),
+    rock |> mutate(category= "Indie Rock", playlist_name = "Indie Rock") |> slice_head(n = 30)
+  ) |> 
+  add_audio_analysis()
+
+
+# Note that you are not allowed to have duplicate songs in the dataset! 
+indie |>
+  count(track.name) %>%
+  arrange(desc(n))
+
+# Grab only track names where it's listed more than once
+tracks_to_remove <- indie |>
+  count(track.name) |>
+  filter(n >= 2) %>%
+  select(track.name)
+
+indie <- indie %>%
+  anti_join(tracks_to_remove)
+
+
+# Similar to code from class, still trying to predict track.name but later we add on playlist name!
+indie_juice <-
+  recipe(
+    track.name ~
+      danceability +
+      energy +
+      loudness +
+      speechiness +
+      acousticness +
+      instrumentalness +
+      liveness +
+      valence +
+      tempo,
+    data = indie
+  ) |>
+  step_center(all_predictors()) |>
+  step_scale(all_predictors()) |> 
+  # step_range(all_predictors()) |> 
+  prep(indie |> mutate(track.name = str_trunc(track.name, 20))) |>
+  juice() |>
+  column_to_rownames("track.name")
+
+indie_dist <- dist(indie_juice, method = "euclidean")
+
+data_for_indie_clustering <- indie_dist |> 
+  hclust(method = "average") |> # average for a balanced tree!
+  dendro_data() 
+
+playlist_data_for_join <- indie %>%
+  select(track.name, playlist_name) %>%
+  mutate(label = str_trunc(track.name, 20))
+
+data_for_indie_clustering$labels <- data_for_indie_clustering$labels %>%
+  left_join(playlist_data_for_join)
+
+# Add factor so can use colouring! 
+data_for_indie_clustering$labels$label <- factor(data_for_indie_clustering$labels$label)
+
+
+data_for_indie_clustering |>
+  ggdendrogram() +
+  geom_text(data = label(data_for_indie_clustering), aes(x, y, 
+                                                         label=label, 
+                                                         hjust=0, 
+                                                         colour=playlist_name), size=3) +
+  coord_flip() + 
+  scale_y_reverse(expand=c(0.2, 0)) +
+  theme(axis.line.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.title.y=element_blank(),
+        panel.background=element_rect(fill="white"),
+        panel.grid=element_blank()) +
+  labs(title = "Playlist Clustering") +
+  guides(
+    colour = guide_legend(
+      title = "Playlist"
+    )
+  )
+```
+
+***
+This graph corresponds to hierarchical clustering, which relies on unsupervised machine learning whereby unlabeled songs are grouped together based on their similarity in Spotify's audio feature measurements. In this cluster, the track names are written at the bottom of each branch, and the color corresponds to which playlist they belong to. The songs that are most similar to each other would be closer together at the end of the tree. Here we can observe that through Spotify's audio features, the songs in the "Indie Folk" playlist are clustered together, with most of the songs on top being colored in red. The songs in the "Indie Rock" playlist are also clearly grouped together in blue. This means that Spotify is able to use its audio features to distinguish the two indie sub-genres from each other. In contrast, the "Indie Pop" playlist does not have an obvious cluster. This is consistent with indie pop being spread out in energy and valence which we observed earlier. This could be because indie pop has a less recognizable "sound" to it. Wikipedia describes indie pop as "a music genre and subculture that combines guitar pop with DIY ethic in opposition to the style and tone of mainstream pop music." This "DIY ethic" could be the factor that distinguishes indie pop songs from each other. Artists could have a different spin to a pop sound, making each indie pop song sound slightly different and vary within Spotify's audio features. 
+
+
+
