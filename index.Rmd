@@ -26,7 +26,7 @@ indie <-
     folk |> mutate(category = "Indie Folk"),
     pop |> mutate(category = "Indie Pop") |> slice_head(n = 50),
     rock |> mutate(category= "Indie Rock")
-  ) 
+  ) |> add_audio_analysis()
 ```
 
 
@@ -273,7 +273,7 @@ The timbre-based matrix is more interesting to look at. The first 5 seconds of t
 This popular indie rock song demonstrates that consistent pitch allows the song to be catchy and easy to follow, but the variation in timbre keeps the listener hooked. The instruments of the indie rock bands play an important role in creating an interesting and successful indie rock song.
 
 
-### Typical Indie Folk: Simple Chroma & Simple Timbre {data-commentary-width=400}
+### Typical Indie Folk: Repeating Chroma & Simple Timbre {data-commentary-width=400}
 ``` {r}
 flightless <-
   get_tidy_audio_analysis("1fEGtTZjrjJW8eUeewnNJR") |> # Change URI.
@@ -405,7 +405,9 @@ grid.arrange(top="\"Cielings\" by Lizzie McAlpine", cielings_chroma, cielings_ti
 ```
 
 *** 
-The third song we will analyze is "I'm In Love With You" by The 1975. The 1975 is a popular indie band. CONTINUE DESCRIPTION
+“Ceilings” by Lizzie McAlpine is the most popular song in the “Indie Pop” playlist. She Hence, it is an interesting song to analyze. 
+
+Starts with guitar (20s)
 
 
 Indie Keys and Chords {.storyboard data-navmenu="A Closer Look"}
@@ -568,7 +570,53 @@ ggplotly(tempo_hist)
 ```
 
 ***
-Most popular songs today have a tempo between 100 and 140bpm. This histogram shows that the Indie genre tempo generally lies between 90 and 160bpm, which is consistent with the popular tempo. The means of all three playlists, which are represented by the purple line in the graph, are close to 120bpm. Indie rock has the fastest tempo with an average of 127bpm, followed by pop with 124bpm, and lastly folk has slowest mean tempo of 116bpm. A tempo between 109-132bpm is known as "allegro" in Italian musical terms and means fast, quick, and bright. This describes the tempo of most of the Indie songs in the corpus. Indie Folk is a slower form of the genre as its mode is centered around 100bpm; 20% of the songs in this playlist have a tempo of 100bpm. This is considered "allegretto," or moderately fast. Indie rock and pop have their modes centered around 120bpm. Indie pop has the most widespread tempo with two outliers: "Maybe I'm Lonely" by Rachel Chinouriri with a tempo of 50bpm, and "Petrified" by Omar Apollo with a tempo of 200bpm. Indie rock has one song with a tempo of 200bpm called "The Rover" by Interpol. Overall, however, the three playlists follow the same histogram pattern of tempo. 
+Spotify’s tempo feature measures the average tempo of a track. Most popular songs today have a tempo between 100 and 140bpm. This histogram shows that the Indie genre tempo generally lies between 70 and 200bpm, which is overlaps the popular tempo. The means of all three playlists, which are represented by the purple line in the graph, are close to 120bpm. Indie rock has the fastest tempo with an average of 127bpm, followed by pop with 124bpm, and lastly folk has slowest mean tempo of 116bpm. A tempo between 109-132bpm is described as fast, quick, and bright. This describes the tempo of most of the Indie songs in the corpus. 
+
+Indie Folk is a slower form of the genre as its mode is centered at 100bpm; 20% of the songs in this playlist have a tempo of 100bpm. Furthermore, three songs in this playlist have a tempo of 70bpm, while the lowest tempo in the other two playlists is 80bpm. Indie folk having a slower tempo is to be expected as a listener, because indie folk does indeed sound slower-paced.
+
+Indie rock and pop have similar tempo distributions. Both their modes are centered around 120bpm, with 20% of their songs having this tempo. This falls right in the middle of the range of tempo of popular songs today.
+Overall, however, the tempo of all three sub-genres is spread out in a similar manner.
+
+### Tempo Variation, Duration, and Volume
+``` {r}
+volume_tempo <- indie |>
+  mutate(
+    sections =
+      map(
+        sections,                                    # sections or segments
+        summarise_at,
+        vars(tempo, loudness, duration),             # features of interest
+        list(section_mean = mean, section_sd = sd)   # aggregation functions
+      )
+  ) |>
+  unnest(sections) |>
+  ggplot(
+    aes(
+      x = tempo,
+      y = tempo_section_sd,
+      colour = category,
+      alpha = loudness
+    )
+  ) +
+  geom_point(aes(size = duration / 60, alpha = loudness)) +
+  geom_rug() +
+  theme_minimal() +
+  ylim(0, 5) +
+  labs(
+    x = "Mean Tempo (bpm)",
+    y = "SD Tempo",
+    colour = "Genre",
+    size = "Duration (min)",
+    alpha = "Volume (dBFS)"
+  )
+
+volume_tempo
+```
+
+***
+This graph displays information about the overall temporal features of the three playlists. The duration of a song is represented by a point's size, and the volume is represented by transparancy. As discussed before, we can observe that indie folk is the quietest sub-genre with many orange points being more transparent than points from other sub-genres. The song durations vary across each sub-genre in similar ways. Hence, the duration of songs cannot help us distinguish between the three playlists, which can vary between 2mins and 6mins. Most of the songs are clustered at a standard deviation below one.
+
+This graph plots the average tempo of a song in BPM and the standard deviation of the tempo within the song itself. Most of the songs are clustered at a standard deviation below 1, indicating that most indie songs stick to one tempo throughout the entire song. This is not surprising as when you listen to indie songs, the tempo does not typically vary. There are three songs that stand out and have the highest standard deviation in tempo in their respective sub-genre. "Free Flow" by Kamal is an indie pop song with the highest SD of 5, "Paint" by The Paper Kites is an indie folk song with the second highest SD of 4.3, and "The Rover" by Interpol is an indie rock sonf with the third highest SD of 3.8. In the next pages, I will examine the tempo of these three songs more closely.
 
 
 <!-- ### "No Cars Go" by Arcade Fire -->
