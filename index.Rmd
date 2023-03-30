@@ -194,10 +194,10 @@ When comparing these four chromagrams at first glance, we can see that the two s
 Overall, the four songs do not have too much pitch variation, with most of their energies contained in one or two pitch classes. This could be an indicator of the "Indie" genre. As an indie listener, I would agree with this observation as most indie songs are written based on one key and do not deviate much from it.
 
 
-Self-Similarity Matrices {.storyboard data-navmenu="A Closer Look"}
+Song Structures {.storyboard data-navmenu="A Closer Look"}
 ==================================
 
-### Typical Indie Rock: Simple Chroma & Complex Timbre {data-commentary-width=400}
+### Typical Indie Rock: Simple Chroma & Complex Timbre {data-width=600 data-commentary-width=500}
 ``` {r}
 a_punk <-
   get_tidy_audio_analysis("3AydAydLzyyZutA0375XIz") |> # Change URI.
@@ -253,19 +253,24 @@ a_punk_timbre <- a_punk |>
   theme_classic() +
   labs(x = "", y = "", title = "Timbre-Based Self-Similarity Matrix") + theme(title = element_text(size = 8))
 
-grid.arrange(top = "\"A-Punk\" by Vampire Weekend", a_punk_chroma, a_punk_timbre, ncol=2)
+grid.arrange(top = "\"A-Punk\" by Vampire Weekend", a_punk_chroma, a_punk_timbre, nrow=1)
 ```
 
 ***
-A self-similarity shows the degree of similarity between different parts of a musical piece. It helps us understand how a song is structured through both its pitch (chroma) and timbre.
+#### What is a Self-Similarity Matrix?
+A self-similarity matrix shows the degree of similarity of a specific feature of a song during any given time of a musical piece. It helps us analyze the structure of a song through either its variations in pitch (chroma) and timbre (instrumentation).
 
-The self-similarity matrices on the left are those of a song by the Vampire Weekend. The Vampire Weekend is a known Indie Rock band. There debut album "Vampire Weekend" was independently released in 2008, hence officially falling under the "Indie" label. "A-Punk" is an energetic and youthful song that starts with a light-hearted guitar riff which is joined by drums and vocals.
+#### How Are They Interpreted?
+Darker regions indicates high similarity and brighter regions indicates contrast. Dark parallel diagonal lines indicates repetition, and novelty is indicated by bright yellow bars. A dark blocks indicates homogeneity in either the pitch or instrumentation throughout that section, while a bright block indicates varying pitch or instrumentation.
 
-It is short song with the following structure: verse, chorus, refrain, verse, chorus refrain. We can see this pattern in the chroma-based matrix: 0-40s is verse 1, 40-60s is chorus & refrain, 60-100s is verse 2, and then back to chorus and refrain. The chroma-based matrix helps us see this clear structure of the song. This pattern is most likely why the song has become so popular. The simple structure makes the song simple to follow and fun to dance to.
+#### "A-Punk" Analysis
+The Vampire Weekend is a popular Indie Rock band. There debut album "Vampire Weekend" was independently released in 2008, hence officially falling under the "Indie" label. "A-Punk" is an energetic and youthful song that starts with a light-hearted guitar riff which is joined by drums and vocals.
 
-The timbre-based matrix is more interesting to look at. At 40 seconds, the first change in timbre is marked by the flute entering the song, which gives the song an extra layer of timbre complexity. At 60 seconds, the cymbal is abruptly played alone, followed by a vocal "hey hey hey" with no instrumental background, and then the drums come back in to move onto the next verse. This is the part of the song that gives the listener anticipation for what is coming next. After the second verse, the flute comes back followed by the "hey hey hey." At the end of the song (~130s), the cymbal comes back abruptly alone marking the end of the song.
+The song has the following structure: verse, chorus, refrain, verse, chorus, refrain. In the chroma-based matrix, we can observe this pattern clearly through the 4 blocks along the diagonal: 0-40s is verse 1, 40-60s is chorus & refrain, 60-100s is verse 2, and then back to chorus and refrain. Verses 1 and 2 have more variety in the use of pitch since those blocks are brighter compared to the blocks representing the chorus and refrain. The chroma-based matrix helps us see this clear structure of the song. This pattern is most likely why the song has become so popular. The simple structure makes the song simple to follow and fun to dance to.
 
-This typical indie rock song shows that the changes pitches and vocals are not as important as the changes in timbre in indie rock. The instruments of the bands play an important role in creating a successful indie rock song.
+The timbre-based matrix is more interesting to look at. The first 5 seconds of the song begins with the guitar playing solo. At the 5 second mark, we can observe a bright bar emerging, which illustrates drums joining in. From then up to 40 seconds the instrumentation remains the same. At 40 seconds, the first change in timbre is marked by the addition of a flute, giving the song an extra layer of timbre complexity. At 60 seconds, the cymbal is abruptly played alone, marked by the bright bar seen on the graph. This is followed by a vocal "hey hey hey" with no instrumental background, marked by a dark section in the matrix, and then the drums come back in to move onto the next verse. This is the part of the song that gives the listener anticipation for what is coming next. After the second verse, the flute comes back followed by the "hey hey hey." At the end of the song (~130s), the cymbal comes back abruptly alone marking the end of the song. 
+
+This popular indie rock song demonstrates that consistent pitch allows the song to be catchy and easy to follow, but the variation in timbre keeps the listener hooked. The instruments of the indie rock bands play an important role in creating an interesting and successful indie rock song.
 
 
 ### Typical Indie Folk: Simple Chroma & Simple Timbre {data-commentary-width=400}
@@ -328,15 +333,22 @@ grid.arrange(top="\"Flightless Bird, American Mouth\" by Iron & Wine", flightles
 ```
 
 *** 
-Iron & Wine is an American indie folk singer-songwriter. His songs have the typical indie folk sound, which is confirmed by the fact that 2 out of the 50 songs in Spotify's "Indie Folk" playlist are his, but he has never been an independent artist. His first album "The Creek Drank the Cradle" was released in 2002 on the Sub Pop label. Hence, "Flightless Bird, American Mouth" by Iron & Wine is an interesting song to analyze as it is labeled an indie song, but was not independently released. 
+Iron & Wine is an American indie folk singer-songwriter. His songs have the typical indie folk sound, which is confirmed by the fact that 2 out of the 50 songs in Spotify’s “Indie Folk” playlist are his. Although he is considered an indie artist, he has never been an independent artist. His first album “The Creek Drank the Cradle” was released in 2002 on the Sub Pop label. Hence, “Flightless Bird, American Mouth” by Iron & Wine is an interesting song to analyze as it is labeled an indie song, but was not independently released.
 
-The self-similarity matrices we see on the left are to be expected. The only two instruments used during the song are the guitar and tambourine and the vocals indicate the structure of the song: verse 1, chorus, verse 2, chorus. Both verses have the same melody, but different lyrics. The chroma-based self-similarity matrix shows the constant pitch used throughout the song, as it does indicate a clear structure to the song. The timbre-based matrix is also quite unvaried further demonstrating the consistency and repetition of a typical Indie song.
+The self-similarity matrices we see on the left are to be expected. Indie folk songs are characterized by a very simple structure known as a strophic form, a particular sequence is repeated over and over in the song. In this particular song, a verse is repeated four times with the same melody, but differing lyrics. 
+
+When considering timbre, the only two instruments used during the song are the guitar and tambourine. The timbre-based matrix mostly contains dark blocks, which demonstrates the homogeneity of instrumentation. The thin bright lines simply indicate that one instrument is not being played anymore or another is added. These lines help us discern the four verses through four homogeneous blocks along the diagonal.
+
+The chroma-based self-similarity matrix shows the repeating use of pitch, throughout the song. As described earlier, the dark diagonal lines indicate repetition. Hence, a particular section with varying pitch is repeated over and over again throughout the song. 
+
+In summary, an indie folk song is characterized by homogeneous instrumentation and repeating pitch.
+
 
 
 ### Typical Indie Pop: Simple Chroma & Simple Timbre {data-commentary-width=400}
 ``` {r}
-in_love <-
-  get_tidy_audio_analysis("0uBdQzKghx88d2Lp8SLFKJ") |> # Change URI.
+cielings <-
+  get_tidy_audio_analysis("2L9N0zZnd37dwF0clgxMGI") |> # Change URI.
   compmus_align(bars, segments) |>                     # Change `bars`
   select(bars) |>                                      #   in all three
   unnest(bars) |>                                      #   of these lines.
@@ -355,7 +367,7 @@ in_love <-
       )
   )
 
-in_love_chroma <- in_love |>
+cielings_chroma <- cielings |>
   compmus_self_similarity(pitches, "cosine") |> # change timbre/pitches
   ggplot(
     aes(
@@ -372,7 +384,7 @@ in_love_chroma <- in_love |>
   theme_classic() +
   labs(x = "", y = "", title = "Chroma-based Self-Similarity Matrix") + theme(title = element_text(size = 8))
 
-in_love_timbre <- in_love |>
+cielings_timbre <- cielings |>
   compmus_self_similarity(timbre, "cosine") |> # change timbre/pitches
   ggplot(
     aes(
@@ -389,7 +401,7 @@ in_love_timbre <- in_love |>
   theme_classic() +
   labs(x = "", y = "", title = "Timbre-Based Self-Similarity Matrix") + theme(title = element_text(size = 8))
 
-grid.arrange(top="\"I'm In Love With You\" by The 1975", in_love_chroma, in_love_timbre, ncol=2)
+grid.arrange(top="\"Cielings\" by Lizzie McAlpine", cielings_chroma, cielings_timbre, ncol=2)
 ```
 
 *** 
