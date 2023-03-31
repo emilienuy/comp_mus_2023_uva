@@ -431,8 +431,9 @@ Indie Keys and Chords {.storyboard data-navmenu="A Closer Look"}
 
 ### Indie Keys 
 ```{r}
-key_histogram <- ggplot(indie, aes(x=key, color=category,fill=category)) + geom_histogram(binwidth = 1, alpha=0.6) + scale_x_continuous(breaks = c(0:11), labels=c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B")) + 
-  facet_wrap(~category) + labs(y = "Count", x="Key", title = "Comparing the Distribution of Key Between Indie Subgenres")
+key_histogram <- ggplot(indie, aes(x=key, color=category, fill=category)) + geom_histogram(binwidth = 0.5, alpha=0.6) + scale_x_continuous(breaks = c(0:11), labels=c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B")) + 
+  # facet_wrap(~category) + 
+  labs(y = "Count", x="Key", title = "Comparing the Distribution of Key Between Indie Subgenres")
 ggplotly(key_histogram)
 ```
 ***
@@ -562,7 +563,76 @@ winter_hymnal |>
 *** 
 A chordogram is a visual representation of the different chords used in a song at any given time. These are made by comparing the chords in the audio recording of the song to a template of predefined chord models. The darker sections in the chordogram are, the more similar those chords are to the template, meaning this chord is being played at a particular time.
 
-"White Winter Hymnal" by Fleet Foxes is another typical indie folk song. It is very repetitive in its melody and lyrics. Its structure consists of an intro followed by the chorus three times. This is very characteristic of indie folk music. The only thing that truly changes throughout the song is the chords used throughout. This chordogram shows that "White Winter Hymnal" uses distinct chords during distinct sections of the song. From 0 to 30s, the song is in an E7 chord, this is the intro of the song. From 30 to 40s, the song goes down to an A7 chord, marking a transition between the intro and the first chorus. From 40 to 60s, the chord goes back to E7 for the chorus. From 60 to 70s, the song goes further down to an F# minor, marking another transtion from the first chorus to the second chorus, and so on. What is interesting to see is that the band marking the chord G-flat 7 is dark throughout the whole chordogram. This is the base chord the song is centered around and then the variation throughout the song indicates the different sections of the song.
+"White Winter Hymnal" by Fleet Foxes is another typical indie folk song. It is very repetitive in its melody and lyrics. Its structure consists of an intro followed by the chorus three times. This is very characteristic of indie folk music. The only thing that truly changes throughout the song is the chords used throughout. This chordogram shows that "White Winter Hymnal" uses distinct chords during distinct sections of the song. From 0 to 30s, the song is in an E7 chord, this is the intro of the song. From 30 to 40s, the song goes down to an A7 chord, marking a transition between the intro and the first chorus. From 40 to 60s, the chord goes back to E7 for the chorus. From 60 to 70s, the song goes further down to an F# minor, marking another transition from the first chorus to the second chorus, and so on. This variety in chord usage further demonstrates that indie folk can have an interesting chroma.
+
+
+### "I'm In Love With You" by The 1975 {data-commentary-width=500}
+``` {r}
+in_love <-
+  get_tidy_audio_analysis("0uBdQzKghx88d2Lp8SLFKJ") |>
+  compmus_align(sections, segments) |>
+  select(sections) |>
+  unnest(sections) |>
+  mutate(
+    pitches =
+      map(segments,
+          compmus_summarise, pitches,
+          method = "mean", norm = "manhattan"
+      )
+  )
+
+
+in_love |> 
+  compmus_match_pitch_template(
+    chord_templates,         # Change to chord_templates if desired
+    method = "euclidean",  # Try different distance metrics
+    norm = "manhattan"     # Try different norms
+  ) |>
+  ggplot(
+    aes(x = start + duration / 2, width = duration, y = name, fill = d)
+  ) +
+  geom_tile() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_minimal() +
+  labs(x = "Time (s)", y = "", title = "Chordogram of \"I'm In Love With You\" by The 1975")
+```
+
+***
+diff chords
+
+### "A-Punk" by Vampire Weekend {data-commentary-width=500}
+``` {r}
+a_punk_ <-
+  get_tidy_audio_analysis("3AydAydLzyyZutA0375XIz") |>
+  compmus_align(sections, segments) |>
+  select(sections) |>
+  unnest(sections) |>
+  mutate(
+    pitches =
+      map(segments,
+          compmus_summarise, pitches,
+          method = "mean", norm = "manhattan"
+      )
+  )
+
+
+a_punk_ |> 
+  compmus_match_pitch_template(
+    chord_templates,         # Change to chord_templates if desired
+    method = "euclidean",  # Try different distance metrics
+    norm = "manhattan"     # Try different norms
+  ) |>
+  ggplot(
+    aes(x = start + duration / 2, width = duration, y = name, fill = d)
+  ) +
+  geom_tile() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_minimal() +
+  labs(x = "Time (s)", y = "", title = "Chordogram of \"A-Punk\" by The Vampire Weekend")
+```
+
+***
+same chord used throughout 
 
 
 Exploring Tempo {.storyboard data-navmenu="A Closer Look"}
@@ -875,5 +945,7 @@ indie_features |>
 This graph plots timbre component 2 against acousticness, with the size of the points correspond to the song's energy level. A general trend that is observed is as acousticness increases, brightness decreases. With brightness being negatively correlated with acousticness, we can assume that an acoustic guitar is not considered to be bright according to Spotify's audio features. Indie rock is clearly recognized as being energetic and having a bright timbre sound. This could be because of the electric guitar usually used in indie rock. Another observation we can make is that indie folk is an acoustic sub-genre. This is not surprising at all because most indie folk songs are indeed acoustic. Lastly, consistent with the previous analyses, indie pop has songs with varying amounts of energy, brightness, and acousticness.
 
 
+Conclusions
+===============================
 
 
