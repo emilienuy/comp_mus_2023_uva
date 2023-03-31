@@ -1,7 +1,8 @@
 ---
 title: "Investigating Indie"
 output: 
-  flexdashboard::flex_dashboard
+  flexdashboard::flex_dashboard:
+    theme: journal
 ---
 
 ```{r setup, include=FALSE}
@@ -552,7 +553,7 @@ A chordogram is a visual representation of the different chords used in a song a
 Exploring Tempo {.storyboard data-navmenu="A Closer Look"}
 =====================================
 
-### Indie Rock is the Fastest, Folk is more Relaxed
+### Indie Rock is the Fastest, Folk is more Relaxed {data-commentary-width=400}
 ```{r}
 
 temp <- indie %>%
@@ -577,7 +578,8 @@ Indie Folk is a slower form of the genre as its mode is centered at 100bpm; 20% 
 Indie rock and pop have similar tempo distributions. Both their modes are centered around 120bpm, with 20% of their songs having this tempo. This falls right in the middle of the range of tempo of popular songs today.
 Overall, however, the tempo of all three sub-genres is spread out in a similar manner.
 
-### Tempo Variation, Duration, and Volume
+
+### Indie Songs Stick To Their Chosen Tempo {data-commentary-width=400}
 ``` {r}
 volume_tempo <- indie |>
   mutate(
@@ -614,31 +616,9 @@ volume_tempo
 ```
 
 ***
-This graph displays information about the overall temporal features of the three playlists. The duration of a song is represented by a point's size, and the volume is represented by transparancy. As discussed before, we can observe that indie folk is the quietest sub-genre with many orange points being more transparent than points from other sub-genres. The song durations vary across each sub-genre in similar ways. Hence, the duration of songs cannot help us distinguish between the three playlists, which can vary between 2mins and 6mins. Most of the songs are clustered at a standard deviation below one.
+This graph displays information about the overall temporal features of the three playlists. The duration of a song is represented by a point's size, and the volume is represented by point transparency. As discussed before, we can observe that indie folk is the quietest sub-genre with many orange points being more transparent compared to points from other sub-genres. The duration of the song vary across each sub-genre in similar ways. Hence, the duration of songs cannot help us distinguish between the three playlists, which can vary between 2mins and 6mins.
 
-This graph plots the average tempo of a song in BPM and the standard deviation of the tempo within the song itself. Most of the songs are clustered at a standard deviation below 1, indicating that most indie songs stick to one tempo throughout the entire song. This is not surprising as when you listen to indie songs, the tempo does not typically vary. There are three songs that stand out and have the highest standard deviation in tempo in their respective sub-genre. "Free Flow" by Kamal is an indie pop song with the highest SD of 5, "Paint" by The Paper Kites is an indie folk song with the second highest SD of 4.3, and "The Rover" by Interpol is an indie rock sonf with the third highest SD of 3.8. In the next pages, I will examine the tempo of these three songs more closely.
-
-
-<!-- ### "No Cars Go" by Arcade Fire -->
-<!-- ``` {r} -->
-<!-- no_cars_go <- get_tidy_audio_analysis("51xBgzcyzojRpqFW2ICQAB") -->
-
-<!-- no_cars_go |> -->
-<!--   tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |> -->
-<!--   ggplot(aes(x = time, y = bpm, fill = power)) + -->
-<!--   geom_raster() + -->
-<!--   scale_fill_viridis_c(guide = "none") + -->
-<!--   labs(x = "Time (s)", y = "Tempo (BPM)") + -->
-<!--   theme_classic() -->
-
-<!-- no_cars_go |> -->
-<!--   tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |> -->
-<!--   ggplot(aes(x = time, y = bpm, fill = power)) + -->
-<!--   geom_raster() + -->
-<!--   scale_fill_viridis_c(guide = "none") + -->
-<!--   labs(x = "Time (s)", y = "Tempo (BPM)") + -->
-<!--   theme_classic() -->
-<!-- ``` -->
+This graph plots the average tempo of a song in BPM and the standard deviation of the tempo within the song itself. In this case, the standard deviation is a measure of variation in tempo in a song in BPM. Most of the songs are clustered at a standard deviation below 1, indicating that most indie songs stick to one tempo throughout the entire song. Furthermore, all the songs have a standard deviation below 5BPM, which is a variation in tempo that humans are not able to perceive and could therefore simply be due to errors in audio analysis. This consistent tempo is typical in indie music, and this graph confirms that the indie genre does not play much with tempo variation.
 
 
 Zooming Back Out {.storyboard}
@@ -854,11 +834,11 @@ workflow() |>
   geom_col() + 
   coord_flip() +
   theme_minimal() +
-  labs(x = NULL, y = "Importance", title = "Random Forest of Indie Sub-Genre Prediction")
+  labs(x = NULL, y = "Importance", title = "Random Forrest of Indie Sub-Genre Prediction")
 ```
 
 ***
-This random forest uses the cross-validation data discussed previously to give us a ranking of feature importance. It measures how useful each Spotify audio feature was for distinguishing the three indie sub-genres. Here we can see that acousticness was the most helpful feature, followed by timbre component 1 and timbre component 2. Timbre refers to the quality of a musical sound that distinguishes different types of musical instruments, or voices. Timbre component 1 refers to the loudness of a song, but, since we already analyzed loudness previously, we will focus on analyzing timbre component 2, which measures a sound's brightness. The next page will further discuss how acousticness and brightness differ between the three playlists.
+This random forrest uses the cross-validation data discussed previously to give us a ranking of feature importance. It measures how useful each Spotify audio feature was for distinguishing the three indie sub-genres. Here we can see that acousticness was the most helpful feature, followed by timbre component 1 and timbre component 2. Timbre refers to the quality of a musical sound that distinguishes different types of musical instruments, or voices. Timbre component 1 refers to the loudness of a song, but, since we already analyzed loudness previously, we will focus on analyzing timbre component 2, which measures a sound's brightness. The next page will further discuss how acousticness and brightness differ between the three playlists.
 
 
 ### Indie Folk is Acoustic, Indie Rock is the Brightest, Indie Pop Enjoys Variety {data-commentary-width=400}
