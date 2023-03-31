@@ -76,6 +76,21 @@ Indie folk separates itself from the other two sub-genres through the valence fe
 The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres. It is indeed a very mellow and calm song. Another atypical song is "Naked as We Came" by Iron & Wine since it is one of the few songs that is low in energy and loudness but has a positive valence. These specific songs are analyzed further in the "Comparing Pitch" tab.
 
 
+### Indie pop lives up to its name, kind of
+``` {r}
+dance_pop <- indie |>                    # Start with awards.
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |> ggplot(aes(x = track.popularity, y = danceability, color=mode, label = track.name)) + 
+  geom_point() + facet_wrap(~category) + labs(x = "Danceability", y = "Popularity", color = "Mode") +
+  scale_color_manual(values = c("#00AFBB", "#E7B800"))
+
+ggplotly(dance_pop)
+```
+
+***
+
+
 
 Comparing Pitch {data-navmenu="A Closer Look"}
 ==================================
