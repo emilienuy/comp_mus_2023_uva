@@ -1,5 +1,6 @@
 ---
 title: "Investigating Indie"
+author: "Emilie Nuyttens - 2023"
 output: 
   flexdashboard::flex_dashboard:
     theme: journal
@@ -83,7 +84,7 @@ Indie folk separates itself from the other two sub-genres through the valence fe
 The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It has the least energy and loudness by far compared to not only the other indie pop songs but also compared to the songs in the other two sub-genres. It is indeed a very mellow and calm song. Another atypical song is "Naked as We Came" by Iron & Wine since it is one of the few songs that is low in energy and loudness but has a positive valence. These specific songs are analyzed further in the "Comparing Pitch" tab.
 
 
-### Does Indie Pop Live Up To Its Name? {data-commentary-width=400}
+### Does Indie Pop Live Up To Its Name? {data-commentary-width=500}
 ``` {r}
 pop <- indie %>%
   group_by(category) %>%
@@ -458,8 +459,9 @@ Indie Keys and Chords {.storyboard data-navmenu="A Closer Look"}
 
 ### Indie Keys
 ```{r}
-key_histogram <- ggplot(indie, aes(x=key, color=category, fill=category)) + geom_histogram(binwidth = 0.5, alpha=0.6) + scale_x_continuous(breaks = c(0:11), labels=c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B")) +
-  # facet_wrap(~category) +
+key_histogram <- ggplot(indie, aes(x=key, color=category, fill=category)) + 
+  geom_histogram(binwidth = 0.5, alpha=0.6) + 
+  scale_x_continuous(breaks = c(0:11),labels=c("C","C#","D","D#","E","F","F#","G","G#","A","A#","B")) +
   labs(y = "Count", x="Key", title = "Comparing the Distribution of Key Between Indie Subgenres")
 ggplotly(key_histogram)
 ```
