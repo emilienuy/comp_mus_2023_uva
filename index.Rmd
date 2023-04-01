@@ -41,8 +41,8 @@ There is an ongoing debate on whether indie music can be considered a genre. Ind
   
 Indie folk combines the catchy melodies of indie rock with the acoustical sounds of contemporary folk music.
   
-Column {data-width=300}
--------
+Column {data-width=200}
+-----------------------
 <iframe src="https://open.spotify.com/embed/playlist/5dMoFfrgm8aOOkneQjt6LT?utm_source=generator" height="100%" width="100%" style="border: none" allowfullscreen allow="autoplay" data-external="1">
 </iframe>
 <iframe src="https://open.spotify.com/embed/playlist/3HDdTtyB76aLDc4wpGFCX4?utm_source=generator" height="100%" width="100%" style="border: none" allowfullscreen allow="autoplay" data-external="1">
@@ -85,18 +85,32 @@ The song "j's lullaby" by Delaney Bailey is a clear outlier in this graph. It ha
 
 ### Does Indie Pop Live Up To Its Name?
 ``` {r}
+pop <- indie %>%
+  group_by(category) %>%
+  summarise(pop_mean = mean(track.popularity), dance_mean = mean(danceability))
+
 dance_pop <- indie |>                    # Start with awards.
   mutate(
     mode = ifelse(mode == 0, "Minor", "Major")
   ) |> ggplot(aes(x = danceability, y = track.popularity, color=mode, label = track.name)) +
   geom_point() + facet_wrap(~category) + labs(x = "Danceability", y = "Popularity", color = "Mode") +
-  scale_color_manual(values = c("#00AFBB", "#E7B800"))
+  scale_color_manual(values = c("#00AFBB", "#E7B800")) + 
+  geom_hline(pop, mapping = aes(yintercept = pop_mean),col="purple", size=0.3) +
+  geom_vline(pop, mapping = aes(xintercept = dance_mean),col="blue", size=0.2)
 
 ggplotly(dance_pop)
 ```
 
 ***
+This graph shows the relationship between a track’s popularity and danceability. Spotify’s danceability audio feature measures how suitable a track is for dancing based on tempo, rhythm, and beat. 0 means not danceable and 1 means very danceable. Track popularity is a measure between 0 and 100, with 100 being most popular and 0 being least popular. Track popularity is measured based on how many times the track has been played. We can observe that there is no clear relation between popularity and danceability; a popular song can be either danceable or not, and vice versa. The purple horizontal line represents the mean track popularity of each playlist, and the blue vertical line represents the mean danceability.
 
+Indie pop, based on its name, should have the songs with the most popularity. It does indeed have the most popular song in the entire playlist, “ceilings” by Lizzy McAlpine, with a popularity of 91. It also, however, has the song with the least popularity, “Scandal” by Emerald. Surprisingly, the “Indie Pop” playlist has the lowest popularity mean of 52. “Indie Folk” has a mean of 57, and “Indie Rock” has the highest mean of 59. Hence, Spotify’s “Indie Pop” playlist does not have the most popular songs in contrast to its name. All three playlists have the majority of their tracks within a popularity measure range of 40 and 80. The three playlists therefore do not differ too much in popularity.
+
+Although indie pop does not win the popularity contest, it does have the highest average danceability score of 0.7. Indie folk and rock have similar averages of 0.5.
+
+We can also observe the different modes, major or minor, used in each track. Both Indie Folk and Pop have the majority of their tracks in a major key, while Indie Rock has about half of its tracks in a minor key.
+
+In summary, track popularity is quite similar across the three playlists, Indie Pop is the most danceable playlist, and Indie Rock has songs played in more minor keys than the other two sub-genres.
 
 
 Comparing Pitch {data-navmenu="A Closer Look"}
@@ -296,7 +310,7 @@ The timbre-based matrix is more interesting to look at. The first 5 seconds of t
 This popular indie rock song demonstrates that consistent pitch allows the song to be catchy and easy to follow, but the variation in timbre keeps the listener hooked. The instruments of the indie rock bands play an important role in creating an interesting and successful indie rock song.
 
 
-### Typical Indie Folk: Repeating Chroma & Simple Timbre {data-commentary-width=400}
+### Typical Indie Folk: Repeating Chroma & Simple Timbre {data-commentary-width=500}
 ``` {r}
 flightless <-
   get_tidy_audio_analysis("1fEGtTZjrjJW8eUeewnNJR") |> # Change URI.
@@ -424,11 +438,11 @@ cielings_timbre <- cielings |>
   theme_classic() +
   labs(x = "", y = "", title = "Timbre-Based Self-Similarity Matrix") + theme(title = element_text(size = 8))
 
-grid.arrange(top="\"Cielings\" by Lizzie McAlpine", cielings_chroma, cielings_timbre, ncol=2)
+grid.arrange(top="\"Cielings\" by Lizzy McAlpine", cielings_chroma, cielings_timbre, ncol=2)
 ```
 
 ***
-“Ceilings” by Lizzie McAlpine is the most popular song in the “Indie Pop” playlist. She Hence, it is an interesting song to analyze.
+“Ceilings” by Lizzy McAlpine is the most popular song in the “Indie Pop” playlist. She Hence, it is an interesting song to analyze.
 
 Starts with guitar (20s)
 
@@ -717,13 +731,16 @@ Zooming Back Out {.storyboard}
 ======================================
 ### Can Spotify's Audio Features Group Indie Sub-Genres? {data-commentary-width=400}
 ``` {r}
+folk <- get_playlist_audio_features("", "6P82OCSEpo1VrZ4TZ2W5jK")
+pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
+rock <- get_playlist_audio_features("","5dMoFfrgm8aOOkneQjt6LT")
+
 indie <-
   bind_rows(
-    folk |> mutate(category = "Indie Folk", playlist_name = "Indie Folk") |> slice_head(n = 30),
-    pop |> mutate(category = "Indie Pop", playlist_name = "Indie Pop") |> slice_head(n = 30),
-    rock |> mutate(category= "Indie Rock", playlist_name = "Indie Rock") |> slice_head(n = 30)
-  ) |>
-  add_audio_analysis()
+    pop |> mutate(playlist = "Indie Pop") |> slice_head(n = 30),
+    folk |> mutate(playlist = "Indie Folk") |> slice_head(n = 30),
+    rock |> mutate(playlist = "Indie Rock") |> slice_head(n = 30)
+  ) |> add_audio_analysis()
 
 
 # Note that you are not allowed to have duplicate songs in the dataset!
@@ -808,16 +825,6 @@ This graph corresponds to hierarchical clustering, which relies on unsupervised 
 
 ### How accurate is the grouping? {data-commentary-width=400}
 ``` {r}
-folk <- get_playlist_audio_features("", "6P82OCSEpo1VrZ4TZ2W5jK")
-pop <- get_playlist_audio_features("", "3HDdTtyB76aLDc4wpGFCX4")
-rock <- get_playlist_audio_features("","5dMoFfrgm8aOOkneQjt6LT")
-
-indie <-
-  bind_rows(
-    pop |> mutate(playlist = "Indie Pop") |> slice_head(n = 30),
-    folk |> mutate(playlist = "Indie Folk") |> slice_head(n = 30),
-    rock |> mutate(playlist = "Indie Rock") |> slice_head(n = 30)
-  ) |> add_audio_analysis()
 
 get_conf_mat <- function(fit) {
   outcome <- .get_tune_outcome_names(fit)
