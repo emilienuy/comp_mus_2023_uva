@@ -383,7 +383,7 @@ In summary, an indie folk song is characterized by homogeneous instrumentation a
 
 
 
-### Typical Indie Pop: Simple Chroma & Simple Timbre {data-commentary-width=400}
+### Typical Indie Pop: Simple Chroma & Simple Timbre {data-commentary-width=500}
 ``` {r}
 cielings <-
   get_tidy_audio_analysis("2L9N0zZnd37dwF0clgxMGI") |> # Change URI.
@@ -443,9 +443,9 @@ grid.arrange(top="\"Cielings\" by Lizzy McAlpine", cielings_chroma, cielings_tim
 ```
 
 ***
-“Ceilings” by Lizzy McAlpine is the most popular song in the “Indie Pop” playlist. She released self-released her first EP “Indigo” in 2018. She released “Ceilings” in 2022 under the AWAL label. AWAL, or Artists Without A Label, is a British company that serves as an alternative to the traditional music label deal, offering artists and independent labels without them giving up ownership or control. Hence, although “ceilings” was released under a label company, it could still be considered “independent.” 
+“ceilings” by Lizzy McAlpine is the most popular song in the “Indie Pop” playlist. She released self-released her first EP “Indigo” in 2018. She released “ceilings” in 2022 under the AWAL label. AWAL, or Artists Without A Label, is a British company that serves as an alternative to the traditional music label deal, offering artists and independent labels without them giving up ownership or control. Hence, although “ceilings” was released under a label company, it could still be considered “independent.” 
 
-“Ceilings” has the following structure: verse 1, chorus, verse 2, chorus, outro. The first 20 seconds of the song consists of an acoustic guitar solo, and then McAlpine joins in with vocals. We can see a slight change in timbre at that time, marking the beginning of the first verse. The chorus starts at 60 seconds, and we see a thin yellow line in the timbre matrix at this time. This could be due to her change in her use of breath. When she starts singing the chorus, McAlpine sings in a more breathy, airy tone. 
+“ceilings” has the following structure: verse 1, chorus, verse 2, chorus, outro. The first 20 seconds of the song consists of an acoustic guitar solo, and then McAlpine joins in with vocals. We can see a slight change in timbre at that time, marking the beginning of the first verse. The chorus starts at 60 seconds, and we see a thin yellow line in the timbre matrix at this time. This could be due to her change in her use of breath. When she starts singing the chorus, McAlpine sings in a more breathy, airy tone. 
 
 At 90 seconds, which marks the beginning of verse 2, half notes played by a base and faint percussion sounds are added to the background of the vocals. This could explain the sudden bright change we can observe in the chroma matrix. A violin than comes in just before 100s, which is what the thin bright line in the timbre matrix could be showing. 
 
@@ -465,8 +465,9 @@ key_histogram <- ggplot(indie, aes(x=key, color=category, fill=category)) +
   labs(y = "Count", x="Key", title = "Comparing the Distribution of Key Between Indie Subgenres")
 ggplotly(key_histogram)
 ```
+
 ***
-This histogram shows the distribution of keys in each indie subgenre playlist. The most common used keys in Indie Pop are C and C#. This is to be expected, as C and G major are the most common key used in pop music. Although G major is one of the most common keys used in pop music, G is surprisingly the least common key in Indie Pop. Hence, indie pop follows the pop-genre norm when it comes to having songs with C as a key, but the minority of the songs are in the key of G. The other two indie genres have a less distinct majority key. Indie Folk has the majority of its songs in the keys C, D, E, and F, and the minority in keys G# and A#. Indie Rock has the majority of its songs in the keys C, D, G, and A, and the minority in keys D#, G#, and A#. C is thus the most common key used in all three genres, followed by D. Overall, the keys used in each subgenre are widespread, with some more and others less common.
+This histogram shows the distribution of keys in each indie subgenre playlist. The most common used keys in Indie Pop are C and C#. This is to be expected, as C major is the most common key used in pop music. Most of the keys are evenly distributed across Indie Pop as a whole, so we can conclude that Indie Pop does not have rules for what key should be used. Indie Folk also uses most of the keys equally with 2 keys that are in minority: G# and A#. Indie Rock also has most of its songs evenly distributed amongst the different keys, with three keys in minority: D#, G#, and A#. Overall, C is the most common key used in all three genres, followed by D and F. Since the keys used in each sub-genre are widespread, a song’s key cannot help us conclude whether or not it belongs to the indie genre.
 
 
 ### "White Winter Hymnal" by Fleet Foxes {data-commentary-width=500}
@@ -627,7 +628,10 @@ in_love |>
 ```
 
 ***
-diff chords
+The 1975 are a popular indie pop band, signed under the Dirty Hit label, so they are not an independent band, but still considered to be indie. The band consists of a lead vocalist and guitarist Matthew Healy, a lead guitarist Adam Hann, a bassist Ross MacDonald, and a drummer George Daniel. The chordogram on the left is of their song “I’m In Love With You.” It shows two major chords used throughout the song: A7 and D7. 
+
+The first 15 seconds begin with a guitar solo, which we can see showing strong chord similarity of A7 and D7 in the chordogram. After this, the vocals come in, and the fainter color shows less strong similarity to chord templates, which could be due to the vocals overlapping with the guitar chords. At around 60s, the chorus begins with a repetition of the lyrics “I’m in love with you, I- I- I- I- I” eight times. This chorus is clearly in a D7 chord as shown on the chordogram between 60 and 100 seconds. Then the song goes back to an A7 chord. The rest of the song is focused on the D7 chord. 
+
 
 ### "A-Punk" by Vampire Weekend {data-commentary-width=500}
 ``` {r}
@@ -661,8 +665,7 @@ a_punk_ |>
 ```
 
 ***
-same chord used throughout
-
+As shown by the chroma-based self-similarity matrix earlier, the chroma in “A-Punk” by The Vampire Weekend is not varied. The chordogram shows the consistent use of a D7 chord, which is simple to play on the guitar. This further confirms that the chroma is simple in Indie Rock.
 
 Exploring Tempo {.storyboard data-navmenu="A Closer Look"}
 =====================================
