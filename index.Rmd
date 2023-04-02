@@ -34,16 +34,24 @@ indie <-
 
 Introduction
 ===================================== 
-
 Column
-------------
-### What makes a song "Indie"? 
-There is an ongoing debate on whether indie music can be considered a genre. Indie is short for “independent” and refers to music released by an artist independently rather than with a record label. Some bands that are considered to be indie, such as Arcade Fire, however, work with a record label. This begs the question: What makes indie music indie? Some argue that indie music has a specific sound, but what are its defining characteristics that allows Spotify to create “Indie” playlists? I hope to investigate this question with my corpus containing songs from three different indie sub-genre playlists created by Spotify: “Indie Rock Mix,” “Indie Pop Mix,” and “Indie Folk Mix.” Comparing songs from these different sub-genres will clarify what characteristics of a song Spotify considers to be indie. The main limitation of my investigation is that the songs in the playlists are recommended by Spotify for my specific account. Hence, it may not reflect the most popular indie songs nor be representative of indie music as a whole. “The Less I Know the Better” by Tame Impala is a typical indie song in my corpus, because it cannot be tied to another genre. Two atypical songs are “Sunflower” by Harry Styles and “Work Song” by Hozier, because neither of these artists are considered to be indie artists. These songs will be good to analyze since they may have the characteristics of a typical indie song, but they are made by non-indie artists.
-  
-Indie folk combines the catchy melodies of indie rock with the acoustical sounds of contemporary folk music.
-  
-Column {data-width=200}
------------------------
+---------
+***What makes a song "Indie"?***
+
+There is an ongoing debate on whether indie music can be considered a genre. Indie is short for “independent” and refers to music released by an artist independently rather than with a record label. Some bands that are considered to be indie, such as Arcade Fire, however, work with a record label. This begs the question: What makes indie music indie? Some argue that indie music has a specific sound, but what are its defining characteristics that allows Spotify to create “Indie” playlists? 
+
+I hope to investigate this question with my corpus containing songs from three different indie sub-genre playlists created by Spotify: “Indie Rock Mix,” “Indie Pop Mix,” and “Indie Folk Mix.” You can scroll through the songs in each playlist displayed on the right. Comparing songs from these different sub-genres will clarify what characteristics of a song Spotify considers to be indie. The main limitation of my investigation is that the playlists only contain fifty songs each, and, since the sample is so small, these songs may not reflect the indie genre/sub-genres as a whole. 
+
+Wikipedia describes indie folk as "hybridizing the acoustic guitar melodies of traditional folk music with contemporary instrumentation." Typical indie folk songs include "Naked As We Came" and "Flightess Bird, American Mouth" by Iron & Wine, and "White Winter Hymnal" by Fleet Foxes. 
+
+Indie rock developed from rock music, but is known to have a softer sound to it compared to rock. Typical indie rock songs include "A-Punk" by Vampire Weekend and "You Only Live Once" by The Strokes.
+
+Wikipedia describes indie pop as "a music genre and subculture that combines guitar pop with DIY ethic in opposition to the style and tone of mainstream pop music." Typical indie pop songs include "cielings" by Lizzy McAlpine and "Oh Caroline" by The 1975.
+
+Each indie sub-genre has stemmed off of another genre (folk, rock, and pop), but they all can be grouped together to have an "indie" sound. I will investigate in which ways the three differ as well as how they coincide. I would hypothesize indie pop to have the most popular music because of the name, indie rock to be the most energetic, and indie folk to be the most acoustic.
+
+Column {data-width=300}
+-------------------
 <iframe src="https://open.spotify.com/embed/playlist/5dMoFfrgm8aOOkneQjt6LT?utm_source=generator" height="100%" width="100%" style="border: none" allowfullscreen allow="autoplay" data-external="1">
 </iframe>
 <iframe src="https://open.spotify.com/embed/playlist/3HDdTtyB76aLDc4wpGFCX4?utm_source=generator" height="100%" width="100%" style="border: none" allowfullscreen allow="autoplay" data-external="1">
@@ -972,5 +980,30 @@ This graph plots timbre component 2 against acousticness, with the size of the p
 
 Conclusions
 ===============================
+### What makes a song indie?
 
+This question is very difficult to answer. There are very clear differences between the three indie sub-genres. These differences are highlighted below:
+
+***Track-Level Features - Energy, Danceability, Popularity, & Valence***
+
+My analysis has shown that indie rock is the most energetic and loud (the features have a positive correlation) sub-genre, followed by indie pop and then indie folk. Indie Pop is the most danceable playlist, yet the least popular based on Spotify's audio features. This is surprising as indie pop has popularity in its name. Lastly, indie folk is the most sad playlist, which makes sense because folk music can have a nostalgic feel to it.
+
+***Instrumentation***
+
+Indie rock uses electric guitars, bass, and drums, and therefore has scores higher on the "brightness" and "loudness" timbre measures. Indie folk uses acoustic instruments, mainly the acoustic guitar, which explains why it has the highest acoustic measures. Indie pop does not have typical instruments; indie pop songs can range from acoustic to loud and bright. Hence, the indie genre follows the verse & chorus structure in general.
+
+***Structure***
+
+Indie rock and pop songs have very similar song structures with a typical verses and choruses. Indie folk songs have much more repetition in lyrics and melodies than indie rock and pop, but they also tend to follow a verse and chorus structure. 
+
+***Chroma***
+
+Indie rock has an equal number of songs in major and minor keys, while the other two sub-genres have the majority of their songs in a major key. Indie folk has the most variety in pitch, which compensates for its instrumentation which does not have much variety. Indie rock and pop songs mostly stick to the same pitch. The indie genre overall can have songs with any key. The key in which a song is played cannot help indicate whether it is indie.
+
+***Tempo***
+
+The three indie sub-genres all have an average tempo of 120BPM. Indie rock has the songs with the fastest tempo, while indie folk is the slowest. Furthermore, overall, indie songs stick to a chosen tempo and do not deviate from this throughout the song.
+
+
+Overall, indie can be many things. An indie song can have any measure of energy, valence, tempo, timbre, danceability, etc. An indie song usually has a structure consisting of verses and choruses and a consistent tempo. But other than this, indie songs can sound very different from each other. The sub-genres indie rock and folk, however, are easy to group and distinguish. Indie pop has much more variety and it harder to categorize, as shown through the clustering and classification. To really understand what makes a song indie, I would investigate differences between the original genres that the indie-genres stemmed from. For example, I would compare indie rock to rock, indie folk to folk, and indie pop to pop. This investigation has shed light on how much variety the indie genre has. Its sub-genres have clear musical differences, but my findings have still not answered the question "what does indie sound like as a whole?"
 
